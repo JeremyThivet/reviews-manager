@@ -1,0 +1,17 @@
+body {
+    font-family: 'Oswald', sans-serif; 
+    font-weight: 350;
+    background-color: #fffae6 !important;
+}
+
+@media (min-width: 567px) {
+    .abs-center-x {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.transparent-card {
+    background-color: #fffae6 !important;
+}
