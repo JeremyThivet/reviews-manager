@@ -15,6 +15,7 @@ import javax.crypto.SecretKey;
 import javax.servlet.http.Cookie;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 @Service
@@ -28,10 +29,13 @@ public class JwtService {
         this.secretKey = this.jwtConfig.secretKey();
     }
 
-    public String createAuthorizationToken(String username, Collection<? extends GrantedAuthority> authorities){
+    public String createAuthorizationToken(User user){
         Date now = new Date();
+        HashMap<String, String> claims = new HashMap<String, String>();
+        claims.put("id", user.getId().toString());
+        claims.put("sub", user.getUsername());
         return Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(Date.from(now.toInstant().plusSeconds(60 * this.jwtConfig.getAuthTokenExpireAfterMinutes())))
                 //.setExpiration(Date.from(now.toInstant().plusSeconds(60)))
@@ -39,19 +43,22 @@ public class JwtService {
                 .compact();
     }
 
-    public String createRefreshToken(String username){
+    public String createRefreshToken(User user){
         // TODO Enregistrer le last login, la dernière fois où le refresh token a été généré en fait.
         Date now = new Date();
+        HashMap<String, String> claims = new HashMap<String, String>();
+        claims.put("id", user.getId().toString());
+        claims.put("sub", user.getUsername());
         return Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(Date.from(now.toInstant().plusSeconds(this.getRefreshTokenDurationInSeconds())))
                 .signWith(secretKey)
                 .compact();
     }
 
-    public Cookie createRefreshTokenCookie(String username){
-        Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), this.createRefreshToken(username));
+    public Cookie createRefreshTokenCookie(User user){
+        Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), this.createRefreshToken(user));
         // TODO Active la Same Origin et HTTPS
         cookie.setSecure(false);
         cookie.setHttpOnly(true);

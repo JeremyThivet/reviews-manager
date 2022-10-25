@@ -9,6 +9,8 @@ import org.jeremyworkspace.reviewsmanager.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.*;
@@ -31,8 +33,14 @@ public class ListReviewController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteList(@PathVariable("id") final Long id){
+    public ResponseEntity deleteList(@PathVariable("id") final Long id, @AuthenticationPrincipal User user){
+        ListReview l = this.listReviewService.getListById(id).orElseThrow();
+        if(user.getId() != l.getOwner().getId()){
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+
         this.listReviewService.deleteListById(id);
+        return ResponseEntity.ok().build();
     }
 
 }

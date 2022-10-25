@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import org.jeremyworkspace.reviewsmanager.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -49,8 +50,13 @@ public class JwtTokenVerifierFilter extends OncePerRequestFilter {
             Jws<Claims> claims = this.jwtService.validateToken(token);
             Claims body = claims.getBody();
             String username = body.getSubject();
+            Long id = Long.parseLong(body.get("id", String.class));
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, new HashSet());
+            User u = new User();
+            u.setUsername(username);
+            u.setId(id);
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(u, null, new HashSet());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (JwtException ex){

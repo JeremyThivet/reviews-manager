@@ -6,8 +6,7 @@ import io.jsonwebtoken.JwtException;
 import org.jeremyworkspace.reviewsmanager.api.auth.UserAuthenticationService;
 import org.jeremyworkspace.reviewsmanager.api.configuration.jwt.JwtConfig;
 import org.jeremyworkspace.reviewsmanager.api.configuration.jwt.JwtService;
-import org.jeremyworkspace.reviewsmanager.api.model.dto.UserDto;
-import org.jeremyworkspace.reviewsmanager.api.model.response.UserResponse;
+import org.jeremyworkspace.reviewsmanager.api.model.User;
 import org.jeremyworkspace.reviewsmanager.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +38,11 @@ public class AuthenticationController {
         response.addCookie(cookie);
     }
 
+    /**
+     * WHen we receive the Refresh Token, we try to get the user in the persistent model so that deleted user inbetween won't be able to use the application anymore.
+     * @param request
+     * @param response
+     */
     @GetMapping("/refreshToken")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response){
 
@@ -64,9 +68,9 @@ public class AuthenticationController {
 
             Jws<Claims> claims = this.jwtService.validateToken(token);
             Claims body = claims.getBody();
-            String username = body.getSubject();
+            User u = this.userService.getUserByUsername(body.getSubject()).orElseThrow();
 
-            String newAuthorizationToken = this.jwtService.createAuthorizationToken(username, new HashSet<>());
+            String newAuthorizationToken = this.jwtService.createAuthorizationToken(u);
 
             response.addHeader("Authorization", "Bearer " + newAuthorizationToken);
 

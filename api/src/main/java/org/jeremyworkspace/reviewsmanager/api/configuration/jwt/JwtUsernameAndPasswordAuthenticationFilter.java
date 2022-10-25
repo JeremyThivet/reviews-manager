@@ -56,20 +56,19 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
+        // Retrieving user logged in.
+        User u = (User) authResult.getPrincipal();
+
         // Adding AccessToken to Headers
-        String username = authResult.getName();
-        String authorizationToken = jwtService.createAuthorizationToken(username, authResult.getAuthorities());
+        String authorizationToken = jwtService.createAuthorizationToken(u);
         response.addHeader("Authorization", "Bearer " + authorizationToken);
 
         // Adding RefreshToken to Cookie
-        Cookie cookie = this.jwtService.createRefreshTokenCookie(username);
+        Cookie cookie = this.jwtService.createRefreshTokenCookie(u);
         response.addCookie(cookie);
 
         // Adding user to response body
-
-        User u = (User) authResult.getPrincipal();
         UserResponse userResponse = new UserResponse(u);
-
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         String userJson =  objectMapper.writeValueAsString(userResponse);
         response.getOutputStream().write(userJson.getBytes());
