@@ -8,8 +8,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet} from "react-r
 import { getUsersCount } from "./services/UserService"
 import UserContext, { UserProvider } from "./services/UserContextProvider";
 import ListsPage from "./components/UserContent/ListsPage";
+import ListsManagerPage from "./components/UserContent/ListsManagerPage";
 import Logout from "./components/UserContent/Logout";
 import './app.scss';
+import ListEditPage from "./components/UserContent/ListEditPage";
 
 
 /**
@@ -84,6 +86,8 @@ function InnerApp() {
 
               <Route element={<AuthenticatedLayout />}>
                 <Route exact path={"/mesclassements"} element={<ListsPage />} />
+                <Route exact path={"/gestionclassements"} element={<ListsManagerPage />} />
+                <Route exact path={"/creerclassement"} element={<ListEditPage />} />
                 <Route exact path={"/deconnexion"} element={<Logout />} />
               </Route>
 

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -35,5 +36,9 @@ public class ListReview {
     @JsonIgnoreProperties("listReviews")
     @JoinColumn(name="user_id", nullable=false)
     private User owner;
+
+    @OneToMany(mappedBy = "listReview", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("listReview")
+    private Set<Field> fields;
 
 }

@@ -36,7 +36,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         // Preparing Authentication Provider
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
@@ -49,6 +48,8 @@ public class SecurityConfiguration {
 
         http
                 .csrf().disable()
+                /*.authorizeRequests()
+                .antMatchers("/**").permitAll();*/
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

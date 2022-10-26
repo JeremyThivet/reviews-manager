@@ -53,6 +53,18 @@ module.exports = {
     },
     footer: {
         allrights: "Tous droits réservés"
+    },
+    listsManager: {
+        title: "Gestion de vos classements",
+        addButton: "Créer un nouveau classement",
+        listnameLabel: "Nom de votre nouveau classement :",
+        listNamePh: "Mes films visionnés, Mes restaurants visités, ..."
+    },
+    lists: {
+        title: "Consultation de vos classements"
+    },
+    editList: {
+        title: "Création d'un nouveau classement"
     }
     
 };

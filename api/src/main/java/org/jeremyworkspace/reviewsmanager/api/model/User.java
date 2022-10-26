@@ -14,6 +14,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name="appuser")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
 
     @Id
@@ -38,7 +39,7 @@ public class User implements UserDetails {
     @Column(name="last_connection", nullable=false)
     private Date lastConnection;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("owner")
     private Set<ListReview> listReviews;
 
