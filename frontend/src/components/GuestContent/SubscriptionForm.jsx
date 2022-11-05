@@ -86,10 +86,10 @@ const SubscriptionForm = () => {
                             <Form.Control name="password" value={user.password} onChange={handleChange} required type="password" placeholder={texts.passPh} 
                             isValid={!errorsInPass  && user.password !== ''} isInvalid={errorsInPass} />
                             <Collapse in={errorsInPass} >
-                                    <div>
-                                        <ErrorMessage errors={formErrors.password} />
-                                    </div>
-                                </Collapse>
+                                <div>
+                                    <ErrorMessage errors={formErrors.password} />
+                                </div>
+                            </Collapse>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formRepass"> 

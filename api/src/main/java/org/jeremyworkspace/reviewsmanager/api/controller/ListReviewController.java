@@ -35,8 +35,12 @@ public class ListReviewController {
     private FieldService fieldService;
 
     @GetMapping("{id}")
-    public ResponseEntity<ListReviewResponse> getListById(@PathVariable("id") final Long id){
+    public ResponseEntity<ListReviewResponse> getListById(@PathVariable("id") final Long id, @AuthenticationPrincipal User user){
+        // TODO : Factoriser le code de vérification d'appartenance à un user.
         ListReviewResponse list = new ListReviewResponse(this.listReviewService.getListById(id).orElseThrow());
+        if(user.getId() != list.getOwner().getId()){
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -55,6 +59,8 @@ public class ListReviewController {
     public ResponseEntity<FieldResponse> createField(HttpServletRequest request, @PathVariable("id") final Long id, @RequestParam String type) throws IOException, FormatException {
 
         // TODO Ajouter contrôle que la list appartient à l'user authentifié.
+
+        // TODO : XSS prevent sur le nom du champ
 
         // Trying to retrieve the list.
         ListReview listReview = this.listReviewService.getListById(id).orElseThrow();

@@ -21,7 +21,7 @@ public abstract class Field {
 
     @Column(name="field_name", nullable=false)
     @NotEmpty(message = "{validation.field.notEmpty}")
-    @Size(min = 1, message = "{validation.field.size}")
+    @Size(min = 1, max=40, message = "{validation.field.size}")
     private String fieldName;
 
     @ManyToOne(fetch = FetchType.LAZY)

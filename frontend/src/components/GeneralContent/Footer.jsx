@@ -12,7 +12,7 @@ class Footer extends React.Component {
         let version = "1.0";
 
         return (
-                <footer className="bg-dark text-center text-white mt-auto footer mt-auto py-3">
+                <footer className="bg-dark  text-center text-white mt-auto footer mt-auto py-3">
                     
                 <section className="pt-1 topfoot mb-0 pb-1">
                 <p className="mb-0">

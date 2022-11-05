@@ -55,8 +55,10 @@ import ListEditPage from "./components/UserContent/ListEditPage";
  * @returns If not user in the context, redirect to the login page, others wise, display childrens.
  */
  const AuthenticatedLayout = () => {
-
-  const [userCtx, setUserCtx] = useContext(UserContext);
+  const [userCtx, setUserCtx] = useContext(UserContext)
+   if(userCtx.needToLoginAgain){
+     return <Navigate to="/deconnexion" />;
+   }
 
    if(Object.keys(userCtx).length === 0){
     return <Navigate to="/connexion" />;
@@ -87,11 +89,11 @@ function InnerApp() {
               <Route element={<AuthenticatedLayout />}>
                 <Route exact path={"/mesclassements"} element={<ListsPage />} />
                 <Route exact path={"/gestionclassements"} element={<ListsManagerPage />} />
-                <Route exact path={"/creerclassement"} element={<ListEditPage />} />
-                <Route exact path={"/deconnexion"} element={<Logout />} />
+                <Route exact path={"/editerclassement/:listId"} element={<ListEditPage />} />
               </Route>
 
               <Route exact path={"/firstuser"} element={<FirstUserPage />} />
+              <Route exact path={"/deconnexion"} element={<Logout />} />
 
               <Route
                 path="*"

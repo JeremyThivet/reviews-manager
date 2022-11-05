@@ -72,6 +72,7 @@ public class UserController {
 
     @PostMapping("{id}/lists")
     public ResponseEntity<ListReviewResponse> createList(@PathVariable("id") final Long userId, @Valid @RequestBody ListReview listReview){
+        // TODO : XSS prevent sur le nom du champ
         User u = this.userService.getUserById(userId).orElseThrow();
         listReview.setOwner(u);
         return new ResponseEntity<>(this.saveList(listReview), HttpStatus.CREATED);

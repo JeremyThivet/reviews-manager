@@ -2,7 +2,7 @@
  * This is the service for the users elements. It peforms calls to the Spring Boot API backend.
  */
 
- import { getCurrentLang } from './LinkService'
+ import { getCurrentLang } from '../services/LinkService'
  
  let langAcron = getCurrentLang()
  let texts = require('../config/lang')(langAcron).register

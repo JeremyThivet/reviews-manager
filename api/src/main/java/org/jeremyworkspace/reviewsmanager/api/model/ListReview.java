@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,7 +22,7 @@ public class ListReview {
 
     @Column(name="list_name", nullable=false)
     @NotEmpty(message = "{validation.list.notEmpty}")
-    @Size(min = 1, message = "{validation.list.size}")
+    @Size(min = 1, max=100, message = "{validation.list.size}")
     private String listName;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,6 +40,6 @@ public class ListReview {
 
     @OneToMany(mappedBy = "listReview", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("listReview")
-    private Set<Field> fields;
+    private List<Field> fields;
 
 }

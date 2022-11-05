@@ -9,13 +9,13 @@ public class FieldResponse {
 
     private Long id;
     private String fieldName;
-    private ListReviewResponse listReviewResponse;
+    private ListReviewResponseWithoutFields listReviewResponseWithoutFields;
     private FieldType fieldType;
 
     public FieldResponse(Field field){
         this.id = field.getId();
         this.fieldName = field.getFieldName();
-        this.listReviewResponse = new ListReviewResponse(field.getListReview());
+        this.listReviewResponseWithoutFields = new ListReviewResponseWithoutFields(field.getListReview());
         this.fieldType = field.getType();
     }
 

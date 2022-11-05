@@ -58,13 +58,65 @@ module.exports = {
         title: "Gestion de vos classements",
         addButton: "Créer un nouveau classement",
         listnameLabel: "Nom de votre nouveau classement :",
-        listNamePh: "Mes films visionnés, Mes restaurants visités, ..."
+        listNamePh: "Mes films visionnés, Mes restaurants visités, ...",
+        tabListName: "Nom du classement",
+        tabListCreationDate: "Date de création",
+        tabListUpdateDate: "Date de dernière modification",
+        tabListActions: "Actions",
+        successDeletedTitle: "Confirmation de suppression",
+        successDeletedContent: "La liste a été supprimée avec succès.",
+        failDeletedTitle: "Erreur",
+        failDeletedContent: "Une erreur s'est produite lors de la suppression de la liste.",
+        errorServer: "Une erreur s'est produite côté serveur, veuillez réessayer."
     },
     lists: {
-        title: "Consultation de vos classements"
+        title: "Consultation et alimentation de vos classements",
+        tabListName: "Nom du classement",
+        tabListUpdateDate: "Date de dernière modification",
+        tabListNumberEntries: "Nombre d'entrées dans le classement",
+        descr: "Vous pouvez retrouver tous vos classements ci-dessous. Pour pouvoir ajouter une nouvelle entrée, cliquez simplement sur le classement cible.",
+        descr2: "Si vous souhaitez créer un nouveau classement, ou éditer un classement existant (ajouter un champ personnalisé, ...), dirigez-vous vers le gestionnaire de classement grâce à la barre de navigation ci-dessus."
     },
     editList: {
-        title: "Création d'un nouveau classement"
+        title: "Edition du classement",
+        addTitle: "Ajouter un champ personnalisé",
+        optPh: "Sélectionnez un type de champ",
+        labelType: "Type de champ à ajouter au classement :",
+        opt1: "Texte (Ex : une description, un commentaire, une adresse, ...)",
+        opt2: "Date (Ex: une date de visite, une date de visionnage, ...)",
+        opt3: "Score (Ex : une note du scénario sur 20, un score du goût d'un plat sur 5, ...)",
+        nameLabel: "Nom du champ :",
+        namePh: "Adresse du restaurant, Note du scénario /20, Date de réalisation de ce plat, ...",
+        scoreMaxLabel: "Score maximum (saisissez 20 si la note sera attribuée sur 20) :",
+        addButton: "Ajouter le champ",
+        tabFieldName: "Nom du champ",
+        tabFieldType: "Type de champ",
+        tabFieldActions: "Actions",
+        tabFieldAutres: "Autres propriétés de champ",
+        scoreMax: "Score maximum",
+        successDeletedTitle: "Confirmation de suppression",
+        successDeletedContent: "Le champ a été supprimé avec succès de la liste.",
+        failDeletedTitle: "Erreur",
+        failDeletedContent: "Une erreur s'est produite lors de la suppression du champ.",
+        error: "Impossible de récupérer la liste avec cet identifiant ou bien vous n'avez pas les droits (ce n'est pas votre liste).",
+        empty: "Ce classement n'a pas encore de champ personnalisé :-( ... Vous pouvez en ajouter un avec le formulaire ci-dessous.",
+        errorAdd: "Erreur lors de l'ajout du champ. Veuillez réessayer.",
+        missingFieldName: "^Le champ doit posséder un nom.",
+        sizeFieldName: "^Le nom du champ doit être compris entre 1 et 40 caractères.",
+        formatScoreMax: "^Le score maximum doit être un nombre positif supérieur ou égal à 1.",
+        missingType: "^Le type de champ doit être défini."
+
+    },
+    loader: {
+        text: "Chargement des données en cours..."
+    },
+    toast: {
+        now: "Maintenant"
+    },
+    field: {
+        text : "Texte",
+        date: "Date",
+        score: "Score / Note"
     }
     
 };

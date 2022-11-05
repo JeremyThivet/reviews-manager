@@ -119,7 +119,7 @@ function storeAccessTokenToLocalStorage(token){
 }
 
 function getAccessTokenInLocalStorage(){
-    sessionStorage.getItem("access-token")
+    return sessionStorage.getItem("access-token")
 }
 
 /**
