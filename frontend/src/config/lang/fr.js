@@ -117,6 +117,32 @@ module.exports = {
         text : "Texte",
         date: "Date",
         score: "Score / Note"
+    },
+    listview: {
+        tabEntryName: "Nom de l'entrée",
+        tabFieldDateAdded: "Date d'ajout",
+        tabFieldScoreTotal: "Score cumulé",
+        tabActions: "Actions",
+        addEntry: "Ajouter une nouvelle entrée",
+        switchToRecent: "Passer en affichage le plus récent d'abord",
+        switchToClassement: "Passer en affichage classement à points",
+        backward: "Revenir à la liste des classements",
+        error: "Impossible de récupérer la liste avec cet identifiant ou bien vous n'avez pas les droits (ce n'est pas votre liste).",
+        empty: "Ce classement n'a pas encore d'entrées :-( ... Vous pouvez en ajouter une avec le bouton ci-dessus.",
+        addEntryTitleModal: "Ajouter une nouvelle entrée",
+        addEntryButtonModal: "Ajouter l'entrée",
+        entryNameLabel: "Nom de l'entrée :",
+        entryNamePh: "La Casa De Papel, Pizzeria Basilic & Co, Hotel Georges V, ...",
+        confirmSuppress: "Oui, supprimer l'entrée.",
+        cancelSuppress: "Retour",
+        titleSuppress: "Confirmation de suppression",
+        textSuppress: "Voulez-vous vraiment supprimer l'entrée suivante : ",
+        titleToast: "Information",
+        textSuppressSuccess : "L'entrée a bien été supprimée",
+        textSuppressFail: "Erreur lors de la suppression de l'entrée",
+        descr: "Vous pouvez ajouter une nouvelle entrée avec le bouton ci-dessous. Si vous souhaitez éditer une entrée existante, double-cliquez sur cette dernière.",
+        descr2: "Basculez du mode 'affichage récent' à 'affichage par points' si votre classement comporte des champs de type 'note' avec le bouton situé à droite.",
+        errorServer: "Une erreur s'est produite côté serveur, veuillez réessayer."
     }
     
 };

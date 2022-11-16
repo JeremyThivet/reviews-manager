@@ -1,8 +1,7 @@
 package org.jeremyworkspace.reviewsmanager.api.service;
 
 import org.jeremyworkspace.reviewsmanager.api.model.Field;
-import org.jeremyworkspace.reviewsmanager.api.repository.fieldfactory.FieldRepository;
-import org.jeremyworkspace.reviewsmanager.api.repository.fieldfactory.FieldRepositoryFactory;
+import org.jeremyworkspace.reviewsmanager.api.repository.FieldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +11,11 @@ import java.util.Optional;
 public class FieldServiceImpl implements FieldService{
 
     @Autowired
-    private FieldRepositoryFactory fieldRepositoryFactory;
-
-    @Autowired
     private FieldRepository fieldRepository;
 
     @Override
     public Field saveField(Field field) {
-        //return (Field) fieldRepositoryFactory.getFieldFactory(field.getType()).save(field);
-        return (Field) this.fieldRepository.save(field);
+        return this.fieldRepository.save(field);
     }
 
     @Override

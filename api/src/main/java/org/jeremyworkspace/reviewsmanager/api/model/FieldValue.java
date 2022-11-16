@@ -10,26 +10,20 @@ import javax.validation.constraints.Size;
 
 @Data
 @Entity
-@Table(name = "field")
+@Table(name = "fieldvalue")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Field {
+public abstract class FieldValue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="field_id")
+    @Column(name="fieldvalue_id")
     private Long id;
 
-    @Column(name="field_name", nullable=false)
-    @NotEmpty(message = "{validation.field.notEmpty}")
-    @Size(min = 1, max=40, message = "{validation.field.size}")
-    private String fieldName;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"fields", "entries"})
-    @JoinColumn(name="list_id", nullable=false)
-    private ListReview listReview;
+    @JsonIgnoreProperties("fieldValues")
+    @JoinColumn(name="entry_id", nullable=false)
+    private Entry entry;
 
-    @Transient
-    private final FieldType type = FieldType.NOTYPE;
+    public abstract FieldType getType();
 
 }

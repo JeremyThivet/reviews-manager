@@ -2,6 +2,8 @@ package org.jeremyworkspace.reviewsmanager.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +15,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name="list")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ListReview {
 
     @Id
@@ -36,10 +39,18 @@ public class ListReview {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("listReviews")
     @JoinColumn(name="user_id", nullable=false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User owner;
 
     @OneToMany(mappedBy = "listReview", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("listReview")
     private List<Field> fields;
+
+    @OneToMany(mappedBy = "listReview", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("listReview")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Entry> entries;
 
 }

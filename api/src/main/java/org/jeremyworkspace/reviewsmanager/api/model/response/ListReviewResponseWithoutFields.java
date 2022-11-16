@@ -7,10 +7,8 @@ import org.jeremyworkspace.reviewsmanager.api.model.ScoreField;
 import org.jeremyworkspace.reviewsmanager.api.model.TextField;
 import org.jeremyworkspace.reviewsmanager.api.model.helper.FieldType;
 
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class ListReviewResponseWithoutFields {

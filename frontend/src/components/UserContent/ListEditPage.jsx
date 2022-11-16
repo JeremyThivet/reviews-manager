@@ -131,7 +131,7 @@ const AddNewFieldForm = ({addFieldInTab}) => {
                             </Form.Group>
 
                             <label>{texts.labelType}</label>
-                            <Form.Select className="mb-3 mt-2" name="type" onChange={handleChange}>
+                            <Form.Select value={fieldToAdd.type} className="mb-3 mt-2" name="type" onChange={handleChange}>
                                 <option value="">{texts.optPh}</option>
                                 <option value="text">{texts.opt1}</option>
                                 <option value="date">{texts.opt2}</option>
@@ -221,10 +221,10 @@ const TabFieldItem = ({item, deleteButton}) => {
 
     return (
                 <tr>
-                    <td>{item.fieldName}</td>
-                    <td>{item.fieldType}</td>
-                    <td>{autres.length ===  0 ? " - " : autres}</td>
-                    <td>{deleteButton}</td>
+                    <td className='align-middle'>{item.fieldName}</td>
+                    <td className='align-middle'>{item.fieldType}</td>
+                    <td className='align-middle'>{autres.length ===  0 ? " - " : autres}</td>
+                    <td className='align-middle'>{deleteButton}</td>
                 </tr>
 
     )
@@ -243,7 +243,6 @@ const ListEditPage = () => {
         list.fields = list.fields.filter(item => item.id !== id)
         setList(list)
     }
-
     const addFieldInTab = (field) => {
         list.fields.push(field)
         setList({...list})
@@ -254,7 +253,6 @@ const ListEditPage = () => {
                 // Retrieve the list to edit
                 let url = '/api/lists/' + params.listId
                 const response = await handleCall(url, "GET", {});
-                console.log(response)
 
                 if(response.data.needToLoginAgain){
                     setUserCtx({...userCtx, needToLoginAgain: true})
@@ -270,8 +268,6 @@ const ListEditPage = () => {
                 }
             })();
     }, [])
-
-    console.log(list)
 
     // Preparing table
     let items = [];

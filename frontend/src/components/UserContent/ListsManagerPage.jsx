@@ -15,6 +15,7 @@ import Loader from '../HelperComponent/Loader'
 import ToastCustom from '../HelperComponent/ToastCustom'
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import { toast } from '../../config/lang/fr';
+import {convertToReadableFormat} from '../../services/DateFormatter'
 
 let langAcron = getCurrentLang()
 let texts = require('../../config/lang')(langAcron).listsManager
@@ -142,8 +143,8 @@ const TabListItem = ({item, deleteButton, editButton}) => {
     return (
                 <tr>
                     <td>{item.listName}</td>
-                    <td>{item.creationDate}</td>
-                    <td>{item.lastUpdate}</td>
+                    <td>{convertToReadableFormat(item.creationDate)}</td>
+                    <td>{convertToReadableFormat(item.lastUpdate)}</td>
                     <td>{editButton} {deleteButton}</td>
                 </tr>
 

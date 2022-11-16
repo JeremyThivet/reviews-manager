@@ -15,3 +15,7 @@ body {
 .transparent-card {
     background-color: #fffae6 !important;
 }
+
+.pointerTab {
+    cursor: pointer;
+}

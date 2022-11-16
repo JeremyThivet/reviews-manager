@@ -17,9 +17,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
     @Override
     public Optional<User> getUserById(Long id){
         return this.userRepository.findById(id);
@@ -36,7 +33,7 @@ public class UserServiceImpl implements UserService {
      * @return created user
      */
     @Override
-    public User saveUser(User user){
+    public User createUser(User user){
 
         // Set last connection date to now.
         user.setLastConnection(new Date());
@@ -52,8 +49,13 @@ public class UserServiceImpl implements UserService {
         // Dealing with password
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
-        User u = this.userRepository.save(user);
+        User u = this.saveUser(user);
         return u;
+    }
+
+    @Override
+    public User updateUser(User user) {
+        return this.saveUser(user);
     }
 
 
@@ -71,6 +73,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserByUsername(String username) {
         return this.userRepository.findFirstByUsername(username);
+    }
+
+    private User saveUser(User user){
+        return this.userRepository.save(user);
     }
 
 }

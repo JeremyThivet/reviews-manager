@@ -12,6 +12,7 @@ import ListsManagerPage from "./components/UserContent/ListsManagerPage";
 import Logout from "./components/UserContent/Logout";
 import './app.scss';
 import ListEditPage from "./components/UserContent/ListEditPage";
+import ListViewPage from "./components/UserContent/ListViewPage";
 
 
 /**
@@ -90,6 +91,7 @@ function InnerApp() {
                 <Route exact path={"/mesclassements"} element={<ListsPage />} />
                 <Route exact path={"/gestionclassements"} element={<ListsManagerPage />} />
                 <Route exact path={"/editerclassement/:listId"} element={<ListEditPage />} />
+                <Route exact path={"/consulterclassement/:listId"} element={<ListViewPage />} />
               </Route>
 
               <Route exact path={"/firstuser"} element={<FirstUserPage />} />
@@ -108,7 +110,6 @@ function InnerApp() {
 }
 
 function App() {
-
   return (
     <UserProvider>
       <InnerApp />

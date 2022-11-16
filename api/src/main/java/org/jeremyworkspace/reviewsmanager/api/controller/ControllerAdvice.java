@@ -1,6 +1,8 @@
 package org.jeremyworkspace.reviewsmanager.api.controller;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.jeremyworkspace.reviewsmanager.api.controller.exception.FormatException;
+import org.jeremyworkspace.reviewsmanager.api.controller.exception.WrongOwnerException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -56,6 +58,15 @@ public class ControllerAdvice
     @ExceptionHandler(FormatException.class)
     public ResponseEntity<Map<String, String>> handleFormatException(
             FormatException ex) {
+        HashMap<String, String> response = new HashMap<String,String>();
+        response.put("error", ex.getMessage());
+        return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(WrongOwnerException.class)
+    public ResponseEntity<Map<String, String>> handleWrongOwnerException(
+            WrongOwnerException ex) {
         HashMap<String, String> response = new HashMap<String,String>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);

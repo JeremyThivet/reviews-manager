@@ -5,18 +5,13 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.jeremyworkspace.reviewsmanager.api.model.User;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.jeremyworkspace.reviewsmanager.api.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import javax.servlet.http.Cookie;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 
 @Service
 public class JwtService {
@@ -24,8 +19,11 @@ public class JwtService {
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
 
-    public JwtService(JwtConfig jwtConfig) {
+    private final UserService userService;
+
+    public JwtService(JwtConfig jwtConfig, UserService userService) {
         this.jwtConfig = jwtConfig;
+        this.userService = userService;
         this.secretKey = this.jwtConfig.secretKey();
     }
 
@@ -34,17 +32,22 @@ public class JwtService {
         HashMap<String, String> claims = new HashMap<String, String>();
         claims.put("id", user.getId().toString());
         claims.put("sub", user.getUsername());
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(Date.from(now.toInstant().plusSeconds(60 * this.jwtConfig.getAuthTokenExpireAfterMinutes())))
                 //.setExpiration(Date.from(now.toInstant().plusSeconds(60)))
                 .signWith(secretKey)
                 .compact();
+
+        // Saving last login
+        user.setLastConnection(new Date());
+        this.userService.updateUser(user);
+
+        return token;
     }
 
     public String createRefreshToken(User user){
-        // TODO Enregistrer le last login, la dernière fois où le refresh token a été généré en fait.
         Date now = new Date();
         HashMap<String, String> claims = new HashMap<String, String>();
         claims.put("id", user.getId().toString());

@@ -2,6 +2,7 @@ package org.jeremyworkspace.reviewsmanager.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.jeremyworkspace.reviewsmanager.api.controller.exception.FormatException;
 import org.jeremyworkspace.reviewsmanager.api.model.*;
 import org.jeremyworkspace.reviewsmanager.api.model.helper.FieldType;
 
@@ -23,6 +24,8 @@ public class ListReviewResponse {
 
     private List<FieldResponseWithoutList> fields;
 
+    private List<EntryResponse> entries;
+
     public ListReviewResponse(ListReview list){
         this.owner = new UserResponse(list.getOwner());
         this.id = list.getId();
@@ -30,18 +33,17 @@ public class ListReviewResponse {
         this.creationDate = list.getCreationDate();
         this.lastUpdate = list.getLastUpdate();
         this.fields = !(list.getFields() == null || list.getFields().isEmpty()) ? list.getFields().stream().map(f -> {
-                    if(f.getType() == FieldType.SCORE)
-                        return new ScoreFieldResponseWithoutList((ScoreField) f);
-                    if(f.getType() == FieldType.DATE)
-                        return new DateFieldResponseWithoutList((DateField)f);
-                    if(f.getType() == FieldType.TEXT)
-                        return new TextFieldResponseWithoutList((TextField)f);
-
-                    return null;
+                    try {
+                        return FieldResponseWithoutListFactory.getFieldResponseWithoutList(f);
+                    } catch (FormatException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
         ).collect(Collectors.toList()) : new ArrayList<>();
-        String s = "lol";
-        // TODO enelver breakpoint
 
+        this.entries = !(list.getEntries() == null || list.getEntries().isEmpty()) ?
+                        list.getEntries().stream().map(e -> new EntryResponse(e)).collect(Collectors.toList())
+                        :
+                        new ArrayList<>();
     }
 }

@@ -1,4 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
@@ -11,6 +12,7 @@ import Loader from '../HelperComponent/Loader'
 import Table from 'react-bootstrap/Table';
 import { getCurrentLang} from '../../services/LinkService'
 import UserContext from '../../services/UserContextProvider'
+import {convertToReadableFormat} from '../../services/DateFormatter'
 
 let langAcron = getCurrentLang()
 let texts = require('../../config/lang')(langAcron).lists
@@ -18,11 +20,19 @@ let texts = require('../../config/lang')(langAcron).lists
 
 const TabListItem = ({item}) => {
 
+    const navigate = useNavigate();
+
+    const handleClick = (event) => {
+        event.preventDefault()
+        let url = "/consulterclassement/" + item.id
+        navigate(url)
+    }
+
     return (
-                <tr>
+            <tr className="pointerTab" onClick={handleClick}>
                     <td>{item.listName}</td>
-                    <td>{item.lastUpdate}</td>
-                    <td>{}</td>
+                    <td>{convertToReadableFormat(item.lastUpdate)}</td>
+                    <td>{item.numberOfEntries}</td>
                 </tr>
 
     )
@@ -39,7 +49,7 @@ const ListsPage = () => {
 
     useEffect(() => {
         (async function(){
-            let url = "/api/users/" + userCtx.id + "/lists";
+            let url = "/api/users/" + userCtx.id + "/lists-sumup";
             const res = await handleCall(url, "GET", {});
 
             // Returns an array of lists objects if successful.

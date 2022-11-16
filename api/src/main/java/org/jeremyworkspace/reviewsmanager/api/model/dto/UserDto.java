@@ -20,13 +20,13 @@ import java.util.Set;
 @Data
 public class UserDto {
 
-    @Column(nullable=false, unique=true)
+    //@Column(nullable=false, unique=true)
     @NotEmpty(message = "{validation.username.notEmpty}")
     @Size(min = 2, max = 25, message = "{validation.username.size}")
     @Pattern(regexp = "\\w*[a-z]\\w*", flags = Pattern.Flag.CASE_INSENSITIVE, message = "{validation.username.format}")
     private String username;
 
-    @Column(name="user_password", nullable=false)
+    //@Column(name="user_password", nullable=false)
     @NotEmpty(message = "{validation.password.notEmpty}")
     @Size(min=8, message = "{validation.password.size}")
     @Pattern(regexp = "(?=\\w*[0-9])(?=\\w*[a-z]).*", flags = Pattern.Flag.CASE_INSENSITIVE, message = "{validation.password.format}")
