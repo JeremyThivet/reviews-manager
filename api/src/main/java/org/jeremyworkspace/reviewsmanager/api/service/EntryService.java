@@ -1,6 +1,7 @@
 package org.jeremyworkspace.reviewsmanager.api.service;
 
 import org.jeremyworkspace.reviewsmanager.api.controller.exception.FormatException;
+import org.jeremyworkspace.reviewsmanager.api.controller.exception.UpdateEntryException;
 import org.jeremyworkspace.reviewsmanager.api.controller.exception.WrongOwnerException;
 import org.jeremyworkspace.reviewsmanager.api.model.Entry;
 import org.jeremyworkspace.reviewsmanager.api.model.Field;
@@ -14,7 +15,9 @@ public interface EntryService {
 
     Entry saveEntry(Entry entry);
 
-    Entry saveEntryFromEntryDto(EntryDto entryDto, ListReview listOwner, User owner) throws WrongOwnerException, FormatException;
+    Entry createEntryFromEntryDto(EntryDto entryDto, ListReview listOwner, User owner) throws WrongOwnerException, FormatException;
+
+    Entry updateEntryFromEntryDto(EntryDto entryDto, Entry entryToUpdate, User owner) throws WrongOwnerException, FormatException, UpdateEntryException;
 
     /**
      * This methods add a default fieldvalue of field to the entry (if a field is added although there already are entries in the list)

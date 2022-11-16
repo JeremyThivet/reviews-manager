@@ -130,6 +130,7 @@ module.exports = {
         error: "Impossible de récupérer la liste avec cet identifiant ou bien vous n'avez pas les droits (ce n'est pas votre liste).",
         empty: "Ce classement n'a pas encore d'entrées :-( ... Vous pouvez en ajouter une avec le bouton ci-dessus.",
         addEntryTitleModal: "Ajouter une nouvelle entrée",
+        modifyEntryButtonModal: "Modifier l'entrée",
         addEntryButtonModal: "Ajouter l'entrée",
         entryNameLabel: "Nom de l'entrée :",
         entryNamePh: "La Casa De Papel, Pizzeria Basilic & Co, Hotel Georges V, ...",

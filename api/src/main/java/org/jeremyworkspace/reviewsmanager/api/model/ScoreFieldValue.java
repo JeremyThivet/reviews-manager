@@ -38,4 +38,21 @@ public class ScoreFieldValue extends FieldValue {
     public FieldType getType() {
         return FieldType.SCORE;
     }
+
+    public Field getField() {
+        return this.scoreField;
+    }
+
+    @Override
+    public void setValueFromString(String value) throws FormatException {
+        try {
+            int score = Integer.parseInt(value);
+            if(score > scoreField.getScoreMax()){
+                throw new FormatException("Le score est plus élevé que le score maximum spécifié dans le champ.");
+            }
+            this.score = score;
+        } catch (NumberFormatException e){
+            throw new FormatException("Mauvais format d'entier.", e);
+        }
+    }
 }

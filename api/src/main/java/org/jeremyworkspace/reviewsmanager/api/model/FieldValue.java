@@ -2,6 +2,7 @@ package org.jeremyworkspace.reviewsmanager.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.jeremyworkspace.reviewsmanager.api.controller.exception.FormatException;
 import org.jeremyworkspace.reviewsmanager.api.model.helper.FieldType;
 
 import javax.persistence.*;
@@ -25,5 +26,9 @@ public abstract class FieldValue {
     private Entry entry;
 
     public abstract FieldType getType();
+
+    public abstract Field getField();
+
+    public abstract void setValueFromString(String value) throws FormatException;
 
 }

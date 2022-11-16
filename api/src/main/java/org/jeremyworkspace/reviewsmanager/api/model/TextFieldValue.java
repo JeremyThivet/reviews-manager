@@ -34,4 +34,13 @@ public class TextFieldValue extends FieldValue {
     public FieldType getType() {
         return FieldType.TEXT;
     }
+
+    public Field getField() {
+        return this.textField;
+    }
+
+    @Override
+    public void setValueFromString(String value) {
+        this.text = value;
+    }
 }

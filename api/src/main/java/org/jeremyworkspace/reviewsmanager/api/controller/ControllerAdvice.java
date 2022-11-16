@@ -54,7 +54,6 @@ public class ControllerAdvice
         return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(FormatException.class)
     public ResponseEntity<Map<String, String>> handleFormatException(
             FormatException ex) {
@@ -63,13 +62,12 @@ public class ControllerAdvice
         return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(WrongOwnerException.class)
     public ResponseEntity<Map<String, String>> handleWrongOwnerException(
             WrongOwnerException ex) {
         HashMap<String, String> response = new HashMap<String,String>();
         response.put("error", ex.getMessage());
-        return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);
     }
 
 }

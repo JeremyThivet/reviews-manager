@@ -99,7 +99,7 @@ public class ListReviewController {
         ListReview listReview = this.listReviewService.getListById(id).orElseThrow();
         this.ownershipVerifier.doesListBelongsToUser(listReview, user);
 
-        EntryResponse entry = new EntryResponse(this.entryService.saveEntryFromEntryDto(entryDto, listReview, user));
+        EntryResponse entry = new EntryResponse(this.entryService.createEntryFromEntryDto(entryDto, listReview, user));
 
         return new ResponseEntity<EntryResponse>(entry, HttpStatus.CREATED);
     }

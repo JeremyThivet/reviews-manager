@@ -3,6 +3,7 @@ package org.jeremyworkspace.reviewsmanager.api;
 import com.jayway.jsonpath.JsonPath;
 import org.hamcrest.core.Is;
 import org.jeremyworkspace.reviewsmanager.api.helpers.RandomFieldsGenerator;
+import org.jeremyworkspace.reviewsmanager.api.helpers.UserTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.internal.matchers.Contains;
@@ -22,7 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.hamcrest.Matchers.greaterThan;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class UserControllerTests {
@@ -51,47 +52,19 @@ public class UserControllerTests {
 
         // Add a user and try to retrieve it
         String name = RandomFieldsGenerator.getRandomName();
-        String user = "{\"username\": \"" + name + "\", \"password\" : \"testtesttest123\"}";
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
-                        .content(user)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
+        UserTest u = new UserTest();
+        u.setUsername(name);
+        u.setPassword("testtesttest123");
+        u = this.registerUserAndGetAccessTokenWithLogin(u);
 
-        Integer id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + id))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + u.getId())
+                .header("Authorization", "Bearer " + u.getAccesToken()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username").value(name))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(u.getId()));
     }
-
-    // user update ok
-    /*@Test
-    public void whenPutRequestToUserAndValidUser_thenCorrectResponse() throws Exception {
-
-        // Add a user and try to retrieve it
-        String user = "{\"username\": \"Charly\", \"password\" : \"testtesttest123\"}";
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
-                        .content(user)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
-
-        Integer id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
-
-        user = "{\"username\": \"Charlytwo\"}";
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/" + id)
-                        .content(user)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content()
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("Charlytwo"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
-    }*/
 
     // Username wrong size
     @Test
@@ -138,7 +111,14 @@ public class UserControllerTests {
     // user id does not exist
     @Test
     public void whenGetRequestToUserAndInvalidId_thenCorrectResponse() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/99999"))
+        String name = RandomFieldsGenerator.getRandomName();
+        UserTest u = new UserTest();
+        u.setUsername(name);
+        u.setPassword("testtesttest123");
+        u = this.registerUserAndGetAccessTokenWithLogin(u);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/99999")
+                        .header("Authorization", "Bearer " + u.getAccesToken()))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -173,20 +153,18 @@ public class UserControllerTests {
 
         // Add a user and try to delete it
         String name = RandomFieldsGenerator.getRandomName();
-        String user = "{\"username\": \"" + name + "\", \"password\" : \"testtesttest123\"}";
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
-                        .content(user)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
+        UserTest u = new UserTest();
+        u.setUsername(name);
+        u.setPassword("testtesttest123");
+        u = this.registerUserAndGetAccessTokenWithLogin(u);
 
-        Integer id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/" + id))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/" + u.getId())
+                .header("Authorization", "Bearer " + u.getAccesToken()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         // Try to get the user, must be empty.
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + id))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + u.getId())
+                .header("Authorization", "Bearer " + u.getAccesToken()))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -195,19 +173,16 @@ public class UserControllerTests {
     @Test
     public void whenPostRequestToUserAndValidUserAndValidList_thenCorrectResponse() throws Exception {
         String name = RandomFieldsGenerator.getRandomName();
-        String user = "{\"username\": \"" + name + "\", \"password\" : \"testtesttest123\"}";
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
-                        .content(user)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
-
-        Integer id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+        UserTest u = new UserTest();
+        u.setUsername(name);
+        u.setPassword("testtesttest123");
+        u = this.registerUserAndGetAccessTokenWithLogin(u);
 
         // Adding the list
         String nameList = RandomFieldsGenerator.getRandomName();
         String list = "{\"listName\": \"" + nameList + "\"}";
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/" + id + "/lists")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/" + u.getId() + "/lists")
+                        .header("Authorization", "Bearer " + u.getAccesToken())
                         .content(list)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -220,36 +195,58 @@ public class UserControllerTests {
     // Add a list to non existing user
     @Test
     public void whenPostRequestToUserAndInvalidUserAndValidList_thenCorrectResponse() throws Exception {
+        String name = RandomFieldsGenerator.getRandomName();
+        UserTest u = new UserTest();
+        u.setUsername(name);
+        u.setPassword("testtesttest123");
+        u = this.registerUserAndGetAccessTokenWithLogin(u);
 
         // Adding the list
         String list = "{\"listName\": \"Ma super liste\"}";
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/99999/lists")
+                        .header("Authorization", "Bearer " + u.getAccesToken())
                         .content(list)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     // Add a list to existing user but list name wrong size
     @Test
     public void whenPostRequestToUserAndValidUserAndInvalidList_thenCorrectResponse() throws Exception {
         String name = RandomFieldsGenerator.getRandomName();
-        String user = "{\"username\": \"" + name + "\", \"password\" : \"testtesttest123\"}";
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
-                        .content(user)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
-
-        Integer id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+        UserTest u = new UserTest();
+        u.setUsername(name);
+        u.setPassword("testtesttest123");
+        u = this.registerUserAndGetAccessTokenWithLogin(u);
 
         // Adding the list
         String list = "{\"listName\": \"\"}";
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/" + id + "/lists")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/" + u.getId() + "/lists")
+                        .header("Authorization", "Bearer " + u.getAccesToken())
                         .content(list)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    // Get all user lists
+    public UserTest registerUserAndGetAccessTokenWithLogin(UserTest u) throws Exception {
+        String user = "{\"username\": \"" + u.getUsername() + "\", \"password\" : \"" + u.getPassword() + "\"}";
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
+                        .content(user)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        Integer id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+
+        result = mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
+                        .content(user)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        u.setId(id);
+        String token = result.getResponse().getHeader("Authorization").split(" ")[1];
+        u.setAccesToken(token);
+
+        return u;
+    }
 
 }

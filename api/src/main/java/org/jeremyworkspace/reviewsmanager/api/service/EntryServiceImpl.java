@@ -1,6 +1,7 @@
 package org.jeremyworkspace.reviewsmanager.api.service;
 
 import org.jeremyworkspace.reviewsmanager.api.controller.exception.FormatException;
+import org.jeremyworkspace.reviewsmanager.api.controller.exception.UpdateEntryException;
 import org.jeremyworkspace.reviewsmanager.api.controller.exception.WrongOwnerException;
 import org.jeremyworkspace.reviewsmanager.api.model.*;
 import org.jeremyworkspace.reviewsmanager.api.model.dto.EntryDto;
@@ -30,7 +31,7 @@ public class EntryServiceImpl implements EntryService{
     }
 
     @Override
-    public Entry saveEntryFromEntryDto(EntryDto entryDto, ListReview listOwner, User owner) throws WrongOwnerException, FormatException {
+    public Entry createEntryFromEntryDto(EntryDto entryDto, ListReview listOwner, User owner) throws WrongOwnerException, FormatException {
 
         // Retrieving all fields, creating a list of fieldvalue
         List<FieldValue> fieldValues = new LinkedList<>();
@@ -66,6 +67,35 @@ public class EntryServiceImpl implements EntryService{
         entry.setFieldValues(fieldValues);
 
         return this.saveEntry(entry);
+    }
+
+    @Override
+    public Entry updateEntryFromEntryDto(EntryDto entryDto, Entry entryToUpdate, User owner) throws WrongOwnerException, FormatException, UpdateEntryException {
+
+        if(entryToUpdate.getFieldValues() == null || entryToUpdate.getFieldValues().isEmpty()){
+            throw new UpdateEntryException("L'entrée ne possède aucun champ de valeur.");
+        }
+
+        // Retrieving all fields, updating every fieldvalues
+        Map<Long, String> fieldWithValues = entryDto.getFieldsWithValues();
+
+        // Iterating over field with values
+        for(Long idField : fieldWithValues.keySet()) {
+            try {
+                String value = fieldWithValues.get(idField);
+                List<FieldValue> fieldValueList = entryToUpdate.getFieldValues();
+                FieldValue fieldValue = entryToUpdate.getFieldValues().stream().filter(fv -> fv.getField().getId() == idField).findFirst().orElseThrow();
+
+                fieldValue.setValueFromString(value);
+
+            } catch (NoSuchElementException e){
+                throw new UpdateEntryException("Le champ " + idField + " ne fait pas partie de l'entrée ciblée.");
+            }
+        }
+
+        entryToUpdate.setLastUpdate(new Date());
+        entryToUpdate.setEntryName(entryDto.getEntryName());
+        return this.saveEntry(entryToUpdate);
     }
 
     @Override

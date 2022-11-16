@@ -85,10 +85,99 @@ public class EntryControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.entryName").value(entryName))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.creator.username").value(u.getUsername()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.listReviewResponseWithoutFields.listName").value(nameList))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fieldValueList[0].field.id").value(fieldId))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fieldValueList[0].score").value(fieldValue))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fieldValueList[0].value").value(fieldValue))
                 ;
+    }
+
+    @Test
+    public void whenUpdatingScoreFieldValueToValidEntry_thenCorrectResponse() throws Exception {
+        String name = RandomFieldsGenerator.getRandomName();
+        UserTest u = new UserTest();
+        u.setUsername(name);
+        u.setPassword("testtesttest123");
+        u = this.registerUserAndGetAccessTokenWithLogin(u);
+
+        // Adding a list
+        String nameList = RandomFieldsGenerator.getRandomName();
+        String list = "{\"listName\": \"" + nameList + "\"}";
+        MvcResult resulttwo = mockMvc.perform(MockMvcRequestBuilders.post("/api/users/" + u.getId() + "/lists")
+                        .header("Authorization", "Bearer " + u.getAccesToken())
+                        .content(list)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
+
+        Integer listId = JsonPath.read(resulttwo.getResponse().getContentAsString(), "$.id");
+
+        // Adding some fields to the list
+        String scoreFieldName = RandomFieldsGenerator.getRandomName();
+        int scoreMax = 20, displayOption = 0;
+        String scoreFieldJson = "{ \"fieldName\": \"" + scoreFieldName + "\", " +
+                "\"scoreMax\": \"" + scoreMax + "\", " +
+                "\"displayOption\": \"" + displayOption + "\"}";
+
+        MvcResult resultThree =mockMvc.perform(MockMvcRequestBuilders.post("/api/lists/" + listId + "/fields?type=score")
+                        .header("Authorization", "Bearer " + u.getAccesToken())
+                        .content(scoreFieldJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
+
+        Integer fieldId = JsonPath.read(resultThree.getResponse().getContentAsString(), "$.id");
+
+        // Adding an entry
+        String entryName = RandomFieldsGenerator.getRandomName();
+        String fieldValue = "15";
+        String entryJson = "{ \"entryName\": \"" + entryName + "\", " +
+                "\"fieldsWithValues\": {"+
+                "\"" + fieldId + "\": \"" + fieldValue + "\" }" +
+                "}";
+
+        MvcResult resultFour =mockMvc.perform(MockMvcRequestBuilders.post("/api/lists/" + listId + "/entries")
+                        .header("Authorization", "Bearer " + u.getAccesToken())
+                        .content(entryJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
+
+
+        Integer entryId = JsonPath.read(resultFour.getResponse().getContentAsString(), "$.id");
+
+
+        // try to get the entry
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/entries/" + entryId)
+                        .header("Authorization", "Bearer " + u.getAccesToken()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.entryName").value(entryName))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.creator.username").value(u.getUsername()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fieldValueList[0].field.id").value(fieldId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fieldValueList[0].value").value(fieldValue))
+        ;
+
+
+        // Trying to update the list name and the value
+        String entryReName = RandomFieldsGenerator.getRandomName();
+        String fieldNewValue = "10";
+        String entryNewJson = "{ \"entryName\": \"" + entryReName + "\", " +
+                "\"fieldsWithValues\": {"+
+                "\"" + fieldId + "\": \"" + fieldNewValue + "\" }" +
+                "}";
+
+        MvcResult resultFive =mockMvc.perform(MockMvcRequestBuilders.put("/api/entries/" + entryId )
+                        .header("Authorization", "Bearer " + u.getAccesToken())
+                        .content(entryNewJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+
+        // try to get the entry and check values
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/entries/" + entryId)
+                        .header("Authorization", "Bearer " + u.getAccesToken()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.entryName").value(entryReName))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.creator.username").value(u.getUsername()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fieldValueList[0].field.id").value(fieldId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fieldValueList[0].value").value(fieldNewValue))
+        ;
+
     }
 
     @Test
@@ -135,7 +224,7 @@ public class EntryControllerTests {
                         .content(entryJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Mauvais format de date")).andReturn();
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("Mauvais format de date.")).andReturn();
 
     }
 

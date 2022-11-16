@@ -24,6 +24,7 @@ public class FieldValueFactory {
         if (fieldType == FieldType.TEXT) {
             res = new TextFieldValue(defaultValue ? TEXT_DEFAULT : value, (TextField) field);
         }
+
         else if (fieldType == FieldType.DATE) {
             Date date = null;
             // Date is given with the following format : yyyy-MM-dd'T'HH:mm:ss.SSSXXX
@@ -34,9 +35,16 @@ public class FieldValueFactory {
             }
             res = new DateFieldValue(defaultValue ? DATE_DEFAULT : date, (DateField) field);
         }
+
         else if (fieldType == FieldType.SCORE) {
-            res = new ScoreFieldValue(defaultValue ? SCORE_DEFAULT : Integer.parseInt(value), (ScoreField) field);
-        } else {
+            try {
+                res = new ScoreFieldValue(defaultValue ? SCORE_DEFAULT : Integer.parseInt(value), (ScoreField) field);
+            } catch (NumberFormatException e){
+                throw new FormatException("Mauvais format d'entier.", e);
+            }
+        }
+
+        else {
             throw new FormatException("Mauvais type de champ personnalisé");
         }
 
