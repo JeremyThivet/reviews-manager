@@ -56,8 +56,13 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteUser(@PathVariable("id") final Long id){
+    public ResponseEntity deleteUser(@PathVariable("id") final Long id, @AuthenticationPrincipal User user){
+        // As of now, user can only delete himself when logged in.
+        if(id != user.getId())
+            return ResponseEntity.status(403).build();
+
         this.userService.deleteUserById(id);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -67,8 +72,8 @@ public class UserController {
      */
     @PostMapping()
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserDto user){
-        User u = new User(user);
 
+        User u = new User(user);
         return new ResponseEntity<>(this.saveUser(u), HttpStatus.CREATED);
     }
 
