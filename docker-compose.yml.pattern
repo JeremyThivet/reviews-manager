@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./api/database_scheme.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    restart: always
+    environment:
+      POSTGRES_USER: defaultadmin
+      POSTGRES_PASSWORD: defaultpassword
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      args:
+        - "--rm"
+    ports:
+      - "9000:9000"
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/revieworld
+      SPRING_DATASOURCE_USERNAME: defaultadmin
+      SPRING_DATASOURCE_PASSWORD: defaultpassword
+
+
+volumes:
+  db_data: {}      
+
+
+
+

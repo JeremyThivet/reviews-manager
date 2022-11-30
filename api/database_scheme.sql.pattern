@@ -1,0 +1,899 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.5 (Debian 14.5-1.pgdg110+1)
+-- Dumped by pg_dump version 14.5
+
+-- Started on 2022-11-29 15:16:02 UTC
+
+CREATE DATABASE revieworld
+    WITH
+    OWNER = admin
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'en_US.utf8'
+    LC_CTYPE = 'en_US.utf8'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+\c revieworld
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 210 (class 1259 OID 16584)
+-- Name: appuser; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.appuser (
+    user_id integer NOT NULL,
+    username character varying NOT NULL,
+    user_password character varying NOT NULL,
+    is_administrator smallint DEFAULT 0 NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    last_connection timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.appuser OWNER TO admin;
+
+--
+-- TOC entry 209 (class 1259 OID 16583)
+-- Name: appuser_user_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.appuser_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.appuser_user_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3437 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: appuser_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.appuser_user_id_seq OWNED BY public.appuser.user_id;
+
+
+--
+-- TOC entry 223 (class 1259 OID 16681)
+-- Name: datefield; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.datefield (
+    field_id integer NOT NULL
+);
+
+
+ALTER TABLE public.datefield OWNER TO admin;
+
+--
+-- TOC entry 222 (class 1259 OID 16680)
+-- Name: datefield_field_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.datefield_field_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.datefield_field_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3438 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: datefield_field_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.datefield_field_id_seq OWNED BY public.datefield.field_id;
+
+
+--
+-- TOC entry 233 (class 1259 OID 16763)
+-- Name: datefieldvalue; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.datefieldvalue (
+    fieldvalue_id integer NOT NULL,
+    date timestamp without time zone NOT NULL,
+    field_id integer NOT NULL
+);
+
+
+ALTER TABLE public.datefieldvalue OWNER TO admin;
+
+--
+-- TOC entry 232 (class 1259 OID 16762)
+-- Name: datefieldvalue_fieldvalue_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.datefieldvalue_fieldvalue_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.datefieldvalue_fieldvalue_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3439 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: datefieldvalue_fieldvalue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.datefieldvalue_fieldvalue_id_seq OWNED BY public.datefieldvalue.fieldvalue_id;
+
+
+--
+-- TOC entry 225 (class 1259 OID 16693)
+-- Name: entry; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.entry (
+    entry_id integer NOT NULL,
+    entry_name character varying NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    list_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.entry OWNER TO admin;
+
+--
+-- TOC entry 224 (class 1259 OID 16692)
+-- Name: entry_entry_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.entry_entry_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.entry_entry_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3440 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: entry_entry_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.entry_entry_id_seq OWNED BY public.entry.entry_id;
+
+
+--
+-- TOC entry 215 (class 1259 OID 16629)
+-- Name: field; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.field (
+    field_id integer NOT NULL,
+    field_name character varying NOT NULL,
+    list_id integer NOT NULL
+);
+
+
+ALTER TABLE public.field OWNER TO admin;
+
+--
+-- TOC entry 214 (class 1259 OID 16628)
+-- Name: field_field_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.field_field_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.field_field_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3441 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: field_field_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.field_field_id_seq OWNED BY public.field.field_id;
+
+
+--
+-- TOC entry 227 (class 1259 OID 16714)
+-- Name: fieldvalue; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.fieldvalue (
+    fieldvalue_id integer NOT NULL,
+    entry_id integer NOT NULL
+);
+
+
+ALTER TABLE public.fieldvalue OWNER TO admin;
+
+--
+-- TOC entry 226 (class 1259 OID 16713)
+-- Name: fieldvalue_fieldvalue_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.fieldvalue_fieldvalue_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.fieldvalue_fieldvalue_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3442 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: fieldvalue_fieldvalue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.fieldvalue_fieldvalue_id_seq OWNED BY public.fieldvalue.fieldvalue_id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 16598)
+-- Name: list; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.list (
+    list_id integer NOT NULL,
+    list_name character varying NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.list OWNER TO admin;
+
+--
+-- TOC entry 211 (class 1259 OID 16597)
+-- Name: list_list_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.list_list_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.list_list_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3443 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: list_list_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.list_list_id_seq OWNED BY public.list.list_id;
+
+
+--
+-- TOC entry 219 (class 1259 OID 16655)
+-- Name: scorefield; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.scorefield (
+    field_id integer NOT NULL,
+    scoremax integer DEFAULT 0 NOT NULL,
+    display_option smallint DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.scorefield OWNER TO admin;
+
+--
+-- TOC entry 218 (class 1259 OID 16654)
+-- Name: scorefield_field_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.scorefield_field_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.scorefield_field_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3444 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: scorefield_field_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.scorefield_field_id_seq OWNED BY public.scorefield.field_id;
+
+
+--
+-- TOC entry 229 (class 1259 OID 16726)
+-- Name: scorefieldvalue; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.scorefieldvalue (
+    fieldvalue_id integer NOT NULL,
+    score integer DEFAULT 0 NOT NULL,
+    field_id integer NOT NULL
+);
+
+
+ALTER TABLE public.scorefieldvalue OWNER TO admin;
+
+--
+-- TOC entry 228 (class 1259 OID 16725)
+-- Name: scorefieldvalue_fieldvalue_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.scorefieldvalue_fieldvalue_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.scorefieldvalue_fieldvalue_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3445 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: scorefieldvalue_fieldvalue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.scorefieldvalue_fieldvalue_id_seq OWNED BY public.scorefieldvalue.fieldvalue_id;
+
+
+--
+-- TOC entry 217 (class 1259 OID 16643)
+-- Name: sumfield; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.sumfield (
+    field_id integer NOT NULL
+);
+
+
+ALTER TABLE public.sumfield OWNER TO admin;
+
+--
+-- TOC entry 216 (class 1259 OID 16642)
+-- Name: sumfield_field_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.sumfield_field_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sumfield_field_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3446 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: sumfield_field_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.sumfield_field_id_seq OWNED BY public.sumfield.field_id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 16669)
+-- Name: textfield; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.textfield (
+    field_id integer NOT NULL
+);
+
+
+ALTER TABLE public.textfield OWNER TO admin;
+
+--
+-- TOC entry 220 (class 1259 OID 16668)
+-- Name: textfield_field_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.textfield_field_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.textfield_field_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3447 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: textfield_field_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.textfield_field_id_seq OWNED BY public.textfield.field_id;
+
+
+--
+-- TOC entry 231 (class 1259 OID 16744)
+-- Name: textfieldvalue; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.textfieldvalue (
+    fieldvalue_id integer NOT NULL,
+    text character varying NOT NULL,
+    field_id integer NOT NULL
+);
+
+
+ALTER TABLE public.textfieldvalue OWNER TO admin;
+
+--
+-- TOC entry 230 (class 1259 OID 16743)
+-- Name: textfieldvalue_fieldvalue_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.textfieldvalue_fieldvalue_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.textfieldvalue_fieldvalue_id_seq OWNER TO admin;
+
+--
+-- TOC entry 3448 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: textfieldvalue_fieldvalue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.textfieldvalue_fieldvalue_id_seq OWNED BY public.textfieldvalue.fieldvalue_id;
+
+
+--
+-- TOC entry 213 (class 1259 OID 16613)
+-- Name: userlist; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.userlist (
+    user_id integer NOT NULL,
+    list_id integer NOT NULL
+);
+
+
+ALTER TABLE public.userlist OWNER TO admin;
+
+--
+-- TOC entry 3226 (class 2604 OID 16587)
+-- Name: appuser user_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.appuser ALTER COLUMN user_id SET DEFAULT nextval('public.appuser_user_id_seq'::regclass);
+
+
+--
+-- TOC entry 3239 (class 2604 OID 16684)
+-- Name: datefield field_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.datefield ALTER COLUMN field_id SET DEFAULT nextval('public.datefield_field_id_seq'::regclass);
+
+
+--
+-- TOC entry 3247 (class 2604 OID 16766)
+-- Name: datefieldvalue fieldvalue_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.datefieldvalue ALTER COLUMN fieldvalue_id SET DEFAULT nextval('public.datefieldvalue_fieldvalue_id_seq'::regclass);
+
+
+--
+-- TOC entry 3240 (class 2604 OID 16696)
+-- Name: entry entry_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.entry ALTER COLUMN entry_id SET DEFAULT nextval('public.entry_entry_id_seq'::regclass);
+
+
+--
+-- TOC entry 3233 (class 2604 OID 16632)
+-- Name: field field_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.field ALTER COLUMN field_id SET DEFAULT nextval('public.field_field_id_seq'::regclass);
+
+
+--
+-- TOC entry 3243 (class 2604 OID 16717)
+-- Name: fieldvalue fieldvalue_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.fieldvalue ALTER COLUMN fieldvalue_id SET DEFAULT nextval('public.fieldvalue_fieldvalue_id_seq'::regclass);
+
+
+--
+-- TOC entry 3230 (class 2604 OID 16601)
+-- Name: list list_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.list ALTER COLUMN list_id SET DEFAULT nextval('public.list_list_id_seq'::regclass);
+
+
+--
+-- TOC entry 3235 (class 2604 OID 16658)
+-- Name: scorefield field_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.scorefield ALTER COLUMN field_id SET DEFAULT nextval('public.scorefield_field_id_seq'::regclass);
+
+
+--
+-- TOC entry 3244 (class 2604 OID 16729)
+-- Name: scorefieldvalue fieldvalue_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.scorefieldvalue ALTER COLUMN fieldvalue_id SET DEFAULT nextval('public.scorefieldvalue_fieldvalue_id_seq'::regclass);
+
+
+--
+-- TOC entry 3234 (class 2604 OID 16646)
+-- Name: sumfield field_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.sumfield ALTER COLUMN field_id SET DEFAULT nextval('public.sumfield_field_id_seq'::regclass);
+
+
+--
+-- TOC entry 3238 (class 2604 OID 16672)
+-- Name: textfield field_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.textfield ALTER COLUMN field_id SET DEFAULT nextval('public.textfield_field_id_seq'::regclass);
+
+
+--
+-- TOC entry 3246 (class 2604 OID 16747)
+-- Name: textfieldvalue fieldvalue_id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.textfieldvalue ALTER COLUMN fieldvalue_id SET DEFAULT nextval('public.textfieldvalue_fieldvalue_id_seq'::regclass);
+
+
+--
+-- TOC entry 3249 (class 2606 OID 16594)
+-- Name: appuser appuser_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.appuser
+    ADD CONSTRAINT appuser_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 3251 (class 2606 OID 16596)
+-- Name: appuser appuser_username_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.appuser
+    ADD CONSTRAINT appuser_username_key UNIQUE (username);
+
+
+--
+-- TOC entry 3265 (class 2606 OID 16686)
+-- Name: datefield datefield_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.datefield
+    ADD CONSTRAINT datefield_pkey PRIMARY KEY (field_id);
+
+
+--
+-- TOC entry 3275 (class 2606 OID 16768)
+-- Name: datefieldvalue datefieldvalue_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.datefieldvalue
+    ADD CONSTRAINT datefieldvalue_pkey PRIMARY KEY (fieldvalue_id);
+
+
+--
+-- TOC entry 3267 (class 2606 OID 16702)
+-- Name: entry entry_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.entry
+    ADD CONSTRAINT entry_pkey PRIMARY KEY (entry_id);
+
+
+--
+-- TOC entry 3257 (class 2606 OID 16636)
+-- Name: field field_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.field
+    ADD CONSTRAINT field_pkey PRIMARY KEY (field_id);
+
+
+--
+-- TOC entry 3269 (class 2606 OID 16719)
+-- Name: fieldvalue fieldvalue_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.fieldvalue
+    ADD CONSTRAINT fieldvalue_pkey PRIMARY KEY (fieldvalue_id);
+
+
+--
+-- TOC entry 3253 (class 2606 OID 16607)
+-- Name: list list_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.list
+    ADD CONSTRAINT list_pkey PRIMARY KEY (list_id);
+
+
+--
+-- TOC entry 3261 (class 2606 OID 16662)
+-- Name: scorefield scorefield_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.scorefield
+    ADD CONSTRAINT scorefield_pkey PRIMARY KEY (field_id);
+
+
+--
+-- TOC entry 3271 (class 2606 OID 16732)
+-- Name: scorefieldvalue scorefieldvalue_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.scorefieldvalue
+    ADD CONSTRAINT scorefieldvalue_pkey PRIMARY KEY (fieldvalue_id);
+
+
+--
+-- TOC entry 3259 (class 2606 OID 16648)
+-- Name: sumfield sumfield_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.sumfield
+    ADD CONSTRAINT sumfield_pkey PRIMARY KEY (field_id);
+
+
+--
+-- TOC entry 3263 (class 2606 OID 16674)
+-- Name: textfield textfield_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.textfield
+    ADD CONSTRAINT textfield_pkey PRIMARY KEY (field_id);
+
+
+--
+-- TOC entry 3273 (class 2606 OID 16751)
+-- Name: textfieldvalue textfieldvalue_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.textfieldvalue
+    ADD CONSTRAINT textfieldvalue_pkey PRIMARY KEY (fieldvalue_id);
+
+
+--
+-- TOC entry 3255 (class 2606 OID 16617)
+-- Name: userlist userlist_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.userlist
+    ADD CONSTRAINT userlist_pkey PRIMARY KEY (user_id, list_id);
+
+
+--
+-- TOC entry 3283 (class 2606 OID 16687)
+-- Name: datefield datefield_field_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.datefield
+    ADD CONSTRAINT datefield_field_id_fkey FOREIGN KEY (field_id) REFERENCES public.field(field_id);
+
+
+--
+-- TOC entry 3292 (class 2606 OID 16774)
+-- Name: datefieldvalue datefieldvalue_field_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.datefieldvalue
+    ADD CONSTRAINT datefieldvalue_field_id_fkey FOREIGN KEY (field_id) REFERENCES public.datefield(field_id);
+
+
+--
+-- TOC entry 3291 (class 2606 OID 16769)
+-- Name: datefieldvalue datefieldvalue_fieldvalue_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.datefieldvalue
+    ADD CONSTRAINT datefieldvalue_fieldvalue_id_fkey FOREIGN KEY (fieldvalue_id) REFERENCES public.fieldvalue(fieldvalue_id);
+
+
+--
+-- TOC entry 3284 (class 2606 OID 16703)
+-- Name: entry entry_list_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.entry
+    ADD CONSTRAINT entry_list_id_fkey FOREIGN KEY (list_id) REFERENCES public.list(list_id);
+
+
+--
+-- TOC entry 3285 (class 2606 OID 16708)
+-- Name: entry entry_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.entry
+    ADD CONSTRAINT entry_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.appuser(user_id);
+
+
+--
+-- TOC entry 3279 (class 2606 OID 16637)
+-- Name: field field_list_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.field
+    ADD CONSTRAINT field_list_id_fkey FOREIGN KEY (list_id) REFERENCES public.list(list_id);
+
+
+--
+-- TOC entry 3286 (class 2606 OID 16720)
+-- Name: fieldvalue fieldvalue_entry_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.fieldvalue
+    ADD CONSTRAINT fieldvalue_entry_id_fkey FOREIGN KEY (entry_id) REFERENCES public.entry(entry_id);
+
+
+--
+-- TOC entry 3276 (class 2606 OID 16608)
+-- Name: list list_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.list
+    ADD CONSTRAINT list_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.appuser(user_id);
+
+
+--
+-- TOC entry 3281 (class 2606 OID 16663)
+-- Name: scorefield scorefield_field_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.scorefield
+    ADD CONSTRAINT scorefield_field_id_fkey FOREIGN KEY (field_id) REFERENCES public.field(field_id);
+
+
+--
+-- TOC entry 3288 (class 2606 OID 16738)
+-- Name: scorefieldvalue scorefieldvalue_field_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.scorefieldvalue
+    ADD CONSTRAINT scorefieldvalue_field_id_fkey FOREIGN KEY (field_id) REFERENCES public.scorefield(field_id);
+
+
+--
+-- TOC entry 3287 (class 2606 OID 16733)
+-- Name: scorefieldvalue scorefieldvalue_fieldvalue_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.scorefieldvalue
+    ADD CONSTRAINT scorefieldvalue_fieldvalue_id_fkey FOREIGN KEY (fieldvalue_id) REFERENCES public.fieldvalue(fieldvalue_id);
+
+
+--
+-- TOC entry 3280 (class 2606 OID 16649)
+-- Name: sumfield sumfield_field_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.sumfield
+    ADD CONSTRAINT sumfield_field_id_fkey FOREIGN KEY (field_id) REFERENCES public.field(field_id);
+
+
+--
+-- TOC entry 3282 (class 2606 OID 16675)
+-- Name: textfield textfield_field_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.textfield
+    ADD CONSTRAINT textfield_field_id_fkey FOREIGN KEY (field_id) REFERENCES public.field(field_id);
+
+
+--
+-- TOC entry 3290 (class 2606 OID 16757)
+-- Name: textfieldvalue textfieldvalue_field_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.textfieldvalue
+    ADD CONSTRAINT textfieldvalue_field_id_fkey FOREIGN KEY (field_id) REFERENCES public.textfield(field_id);
+
+
+--
+-- TOC entry 3289 (class 2606 OID 16752)
+-- Name: textfieldvalue textfieldvalue_fieldvalue_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.textfieldvalue
+    ADD CONSTRAINT textfieldvalue_fieldvalue_id_fkey FOREIGN KEY (fieldvalue_id) REFERENCES public.fieldvalue(fieldvalue_id);
+
+
+--
+-- TOC entry 3277 (class 2606 OID 16618)
+-- Name: userlist userlist_list_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.userlist
+    ADD CONSTRAINT userlist_list_id_fkey FOREIGN KEY (list_id) REFERENCES public.list(list_id);
+
+
+--
+-- TOC entry 3278 (class 2606 OID 16623)
+-- Name: userlist userlist_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.userlist
+    ADD CONSTRAINT userlist_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.appuser(user_id);
+
+
+-- Completed on 2022-11-29 15:16:02 UTC
+
+--
+-- PostgreSQL database dump complete
+--
+

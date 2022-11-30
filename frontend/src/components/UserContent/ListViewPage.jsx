@@ -404,7 +404,7 @@ const ListViewPage = () => {
     const [idToDelete, setIdToDelete] = useState(-1)
     const [textToDisplayConfirm, setTextToDisplayConfirm] = useState("")
 
-    const handleCloseConfirm = () => setShowConfirm(false);
+    const handleCloseConfirm = () => setShowConfirm(false); 
 
     const handleShowConfirm = (id) => { 
         let entryName = list.entries.find(entry => entry.id === id).entryName

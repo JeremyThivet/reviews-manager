@@ -64,6 +64,10 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                     // Public URL
                     .antMatchers(HttpMethod.POST, loginUrl).permitAll()
+                    .antMatchers(HttpMethod.GET, "/").permitAll()
+                    .antMatchers(HttpMethod.GET, "/version").permitAll()
+                    .antMatchers(HttpMethod.GET, "/assets/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/static/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/refreshToken").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/users/count").permitAll()
