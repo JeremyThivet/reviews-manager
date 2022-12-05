@@ -62,8 +62,8 @@ public class JwtService {
 
     public Cookie createRefreshTokenCookie(User user, boolean stayConnectedOption){
         Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), this.createRefreshToken(user, stayConnectedOption));
-        // TODO Active la Same Origin et HTTPS
-        cookie.setSecure(false);
+        // TODO Active la Same Origin
+        cookie.setSecure(true);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(this.getRefreshTokenDurationInSeconds(stayConnectedOption));
         return cookie;
@@ -71,9 +71,6 @@ public class JwtService {
 
     public Cookie getExpiredRefreshTokenCookie(){
         Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), "");
-        // TODO Active la Same Origin et HTTPS
-        cookie.setSecure(false);
-        cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
         return cookie;
     }

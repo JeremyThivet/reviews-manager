@@ -9,5 +9,5 @@ fi
 sed "s/ admin/ $1/g" api/database_scheme.sql.pattern > api/database_scheme.sql
 sed -e "s/ defaultadmin/ $1/g"  -e "s/ defaultpassword/ $2/g"  docker-compose.yml.pattern > docker-compose.yml
 
-docker-compose up --build -d
+docker compose up --build -d
 
