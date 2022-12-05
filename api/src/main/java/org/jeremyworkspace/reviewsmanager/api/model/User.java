@@ -55,12 +55,16 @@ public class User implements UserDetails {
     @Transient
     private final boolean isEnabled;
 
+    @Transient
+    private final boolean stayConnected;
+
     public User(){
         this.grantedAuthorities = null;
         this.isAccountNonLocked = true;
         this.isCredentialsNonExpired = true;
         this.isAccountNonExpired = true;
         this.isEnabled = true;
+        this.stayConnected = false;
     }
 
     public User(UserDto u){
@@ -71,6 +75,7 @@ public class User implements UserDetails {
         this.isCredentialsNonExpired = true;
         this.isAccountNonExpired = true;
         this.isEnabled = true;
+        this.stayConnected = false;
     }
 
     @Override

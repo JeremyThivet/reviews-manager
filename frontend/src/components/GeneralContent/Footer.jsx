@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from "react-router-dom";
 import { getCurrentLang} from '../../services/LinkService'
 import { getAppVersion } from '../../services/GeneralService'
 
@@ -31,7 +32,7 @@ class Footer extends React.Component {
                     
                     <section className="pt-1 topfoot mb-0 pb-1">
                         <p className="mb-0">
-                            {texts.allrights} - Version {this.state.version}
+                        © 2022 - {texts.allrights} - Version {this.state.version} - <Link className="text-white" to="mentionslegales">{texts.legalNotice}</Link>
                         </p>
                     </section>
 

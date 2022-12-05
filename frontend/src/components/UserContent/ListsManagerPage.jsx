@@ -14,7 +14,6 @@ import { handleCall } from '../../services/AccessControlService'
 import Loader from '../HelperComponent/Loader'
 import ToastCustom from '../HelperComponent/ToastCustom'
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import { toast } from '../../config/lang/fr';
 import {convertToReadableFormat} from '../../services/DateFormatter'
 
 let langAcron = getCurrentLang()

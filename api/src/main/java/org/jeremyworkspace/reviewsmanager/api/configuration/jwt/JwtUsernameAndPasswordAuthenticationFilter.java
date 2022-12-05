@@ -26,11 +26,14 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     private final JwtService jwtService;
     private ObjectMapper objectMapper;
 
+    private boolean stayConnectedOption;
+
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService, String loginUrl) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.setFilterProcessesUrl(loginUrl);
         this.objectMapper = new ObjectMapper();
+        this.stayConnectedOption = false;
     }
 
     @Override
@@ -44,6 +47,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                     credentials.getPassword()
             );
 
+            this.stayConnectedOption = credentials.isStayConnected();
             Authentication authenticate = authenticationManager.authenticate(authentication);
             return authenticate;
 
@@ -64,7 +68,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         response.addHeader("Authorization", "Bearer " + authorizationToken);
 
         // Adding RefreshToken to Cookie
-        Cookie cookie = this.jwtService.createRefreshTokenCookie(u);
+        Cookie cookie = this.jwtService.createRefreshTokenCookie(u, this.stayConnectedOption);
         response.addCookie(cookie);
 
         // Adding user to response body

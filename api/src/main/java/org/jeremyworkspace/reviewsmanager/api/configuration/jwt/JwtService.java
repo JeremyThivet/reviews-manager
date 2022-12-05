@@ -47,7 +47,7 @@ public class JwtService {
         return token;
     }
 
-    public String createRefreshToken(User user){
+    public String createRefreshToken(User user, boolean stayConnectedOption){
         Date now = new Date();
         HashMap<String, String> claims = new HashMap<String, String>();
         claims.put("id", user.getId().toString());
@@ -55,17 +55,17 @@ public class JwtService {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(Date.from(now.toInstant().plusSeconds(this.getRefreshTokenDurationInSeconds())))
+                .setExpiration(Date.from(now.toInstant().plusSeconds(this.getRefreshTokenDurationInSeconds(stayConnectedOption))))
                 .signWith(secretKey)
                 .compact();
     }
 
-    public Cookie createRefreshTokenCookie(User user){
-        Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), this.createRefreshToken(user));
+    public Cookie createRefreshTokenCookie(User user, boolean stayConnectedOption){
+        Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), this.createRefreshToken(user, stayConnectedOption));
         // TODO Active la Same Origin et HTTPS
         cookie.setSecure(false);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(this.getRefreshTokenDurationInSeconds());
+        cookie.setMaxAge(this.getRefreshTokenDurationInSeconds(stayConnectedOption));
         return cookie;
     }
 
@@ -87,7 +87,8 @@ public class JwtService {
         return claims;
     }
 
-    private int getRefreshTokenDurationInSeconds(){
+    private int getRefreshTokenDurationInSeconds(boolean stayConnectedOption){
+        // TODO implement stay connected feature
         return 60 * 60 * 24 * this.jwtConfig.getRefreshTokenExpireAfterDays();
     }
 }

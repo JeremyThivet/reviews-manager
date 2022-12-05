@@ -16,7 +16,7 @@ let texts = require('../../config/lang')(langAcron).connection
 
 const ConnectionForm = () => {
 
-    const initialFormState = {username: '', password:''}
+    const initialFormState = {username: '', password:'', stayConnected: false}
     const [user, setUser] = useState(initialFormState);
     const [userCtx, setUserCtx] = useContext(UserContext);
 
@@ -24,7 +24,11 @@ const ConnectionForm = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target
-        let newUser = {...user, [name]: value}
+
+        let valueToAssign = name == "stayConnected" ? event.target.checked : value
+
+        let newUser = {...user, [name]: valueToAssign}
+        
         setUser(user => (newUser))
     }
 
@@ -75,7 +79,9 @@ const ConnectionForm = () => {
                                     <Form.Control name="password" value={user.password} onChange={handleChange} required type="password" placeholder={texts.passPh} 
                                      />
                                 </Form.Group>
-
+                                
+                                
+ 
                                 <hr className ="mt-4 mb-4"></hr>
                             
                                 </>

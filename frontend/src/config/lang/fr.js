@@ -1,5 +1,20 @@
 
 module.exports = {
+    homeguest: {
+        title: "Bienvenue sur Revieworld",
+        description: "S'il s'agit de votre première visite, vous pouvez dès à présent créer un compte avec le bouton ci-dessus. Sinon, vous pouvez vous connecter en saisissant vos identifiants."
+    },
+    legalnotice: {
+        title: "Mentions légales",
+        description: "Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la confiance en l’économie numérique, il est précisé aux utilisateurs de Revieworld l’identité des différents intervenants dans le cadre de sa mise en oeuvre.",
+        titleHeb: "Hébergeur",
+        descrHeb: "L'hébergement du site web est assuré par la société  par la société Amazon Web Services LLC.",
+        descr2Heb: "Adresse: P.O. Box 81226, Seattle, WA 98108-122",
+        websiteHeb: "https://aws.amazon.com/fr/legal/",
+        textLinkHeb: "Plus d'informations",
+        titleCookies: "Utilisation des cookies",
+        descrCookies: "Ce site web utilise les cookies pour vous proposer une expérience utilisateur unique. Les seules données collectées nous permettent de 1) Retenir votre choix concernant la politique de cookies. 2) Retenir votre choix de préférence de connexion longue (Bouton rester connecté sur l'interface de connexion) et c'est tout :) !"
+    },
     register: {
         usernameLabel: "Nom d'utilisateur :",
         usernamePh: "Yandu",
@@ -46,13 +61,15 @@ module.exports = {
         passLabel: "Mot de passe :",
         passPh: "***********",
         success: "Connexion réussie ! Vous allez être redirigé...",
-        successTitle: "Authentification réussie"
+        successTitle: "Authentification réussie",
+        stayConnected: "Rester connecté"
     },
     accesscontrol: {
         loginError: "Erreur lors de la connexion, veuillez vérifier vos identifiants."
     },
     footer: {
-        allrights: "Tous droits réservés"
+        allrights: "Tous droits réservés",
+        legalNotice: "Mentions légales"
     },
     listsManager: {
         title: "Gestion de vos classements",

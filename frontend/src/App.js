@@ -13,6 +13,8 @@ import Logout from "./components/UserContent/Logout";
 import './app.scss';
 import ListEditPage from "./components/UserContent/ListEditPage";
 import ListViewPage from "./components/UserContent/ListViewPage";
+import HomeGuestPage from "./components/GeneralContent/HomeGuestPage"
+import LegalNoticePage from "./components/GeneralContent/LegalNoticePage";
 
 
 /**
@@ -81,7 +83,8 @@ function InnerApp() {
       <Router>
         <Routes>
               <Route element={<InitializationLayout />}>
-                <Route path="/" />
+                <Route path="/" element={<HomeGuestPage />} />
+                <Route path="/mentionslegales" element={<LegalNoticePage />} />
                 <Route exact path={"/inscription"} element={<SubscriptionPage />} />
                 <Route exact path={"/connexion"} element={<ConnectionForm />
                 } />
