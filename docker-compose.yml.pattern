@@ -18,13 +18,14 @@ services:
     security_opt:
         - no-new-privileges:true
     ports:
-      - "80:9000"
+      - "443:9000"
     restart: always
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/revieworld
       SPRING_DATASOURCE_USERNAME: defaultadmin
       SPRING_DATASOURCE_PASSWORD: defaultpassword
-
+      APPLICATION_JWT_SECRETKEY: defaultjwtpassword
+      SERVER_SSL_KEYSTOREPASSWORD: defaultkeystorepassword
 
 volumes:
   db_data: {}      

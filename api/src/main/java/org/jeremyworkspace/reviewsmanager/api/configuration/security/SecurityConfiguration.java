@@ -49,7 +49,7 @@ public class SecurityConfiguration {
         String loginUrl = "/api/login";
 
         http
-                .requiresChannel(channel -> channel.anyRequest().requiresSecure())
+                //.requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
