@@ -646,7 +646,7 @@ const ListViewPage = () => {
                                 </Col>
                             </Row>
 
-                            <Table striped bordered hover>
+                            <Table responsive striped bordered hover>
                                 <thead>
                                     <tr>
                                         {headers.map((value, index) => value.header)}

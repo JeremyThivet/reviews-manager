@@ -87,7 +87,7 @@ const ListsPage = () => {
 
         <Row className="mt-4 text-center justify-content-center">
             <Col className="col-md-9">
-                <Table striped bordered hover>
+                <Table responsive striped bordered hover>
                     <thead>
                         <tr>
                             <th>{texts.tabListName}</th>

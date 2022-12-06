@@ -80,7 +80,9 @@ const ConnectionForm = () => {
                                      />
                                 </Form.Group>
                                 
-                                
+                                <Form.Group className="mt-3" controlId="formStayConnected">
+                                    <Form.Check type="checkbox" name="stayConnected" onChange={handleChange} label={texts.stayConnected} />
+                                </Form.Group>
  
                                 <hr className ="mt-4 mb-4"></hr>
                             

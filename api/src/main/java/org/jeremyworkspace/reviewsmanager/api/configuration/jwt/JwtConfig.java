@@ -18,6 +18,7 @@ public class JwtConfig {
     private String tokenPrefix;
     private Integer authTokenExpireAfterMinutes;
     private Integer refreshTokenExpireAfterDays;
+    private Integer refreshTokenExpireAfterDaysStayConnected;
     private String refreshTokenCookieName;
     private final String authorizationHeader = "Authorization";
 

@@ -36,7 +36,6 @@ public class JwtService {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(Date.from(now.toInstant().plusSeconds(60 * this.jwtConfig.getAuthTokenExpireAfterMinutes())))
-                //.setExpiration(Date.from(now.toInstant().plusSeconds(60)))
                 .signWith(secretKey)
                 .compact();
 
@@ -47,7 +46,7 @@ public class JwtService {
         return token;
     }
 
-    public String createRefreshToken(User user, boolean stayConnectedOption){
+    public String createRefreshToken(User user, long tokenDurationInSeconds){
         Date now = new Date();
         HashMap<String, String> claims = new HashMap<String, String>();
         claims.put("id", user.getId().toString());
@@ -55,13 +54,13 @@ public class JwtService {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(Date.from(now.toInstant().plusSeconds(this.getRefreshTokenDurationInSeconds(stayConnectedOption))))
+                .setExpiration(Date.from(now.toInstant().plusSeconds(tokenDurationInSeconds)))
                 .signWith(secretKey)
                 .compact();
     }
 
     public Cookie createRefreshTokenCookie(User user, boolean stayConnectedOption){
-        Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), this.createRefreshToken(user, stayConnectedOption));
+        Cookie cookie = new Cookie(this.jwtConfig.getRefreshTokenCookieName(), this.createRefreshToken(user, this.getRefreshTokenDurationInSeconds(stayConnectedOption)));
         // TODO Active la Same Origin
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
@@ -85,7 +84,6 @@ public class JwtService {
     }
 
     private int getRefreshTokenDurationInSeconds(boolean stayConnectedOption){
-        // TODO implement stay connected feature
-        return 60 * 60 * 24 * this.jwtConfig.getRefreshTokenExpireAfterDays();
+        return 60 * 60 * 24 * (stayConnectedOption ? this.jwtConfig.getRefreshTokenExpireAfterDaysStayConnected() : this.jwtConfig.getRefreshTokenExpireAfterDays());
     }
 }
