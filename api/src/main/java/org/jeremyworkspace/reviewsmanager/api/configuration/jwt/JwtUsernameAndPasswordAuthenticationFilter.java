@@ -47,8 +47,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                     credentials.getPassword()
             );
 
-            this.stayConnectedOption = credentials.isStayConnected();
             Authentication authenticate = authenticationManager.authenticate(authentication);
+            this.stayConnectedOption = credentials.isStayConnected();
+
             return authenticate;
 
         } catch (IOException ex){

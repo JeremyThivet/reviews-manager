@@ -20,7 +20,7 @@ public class JwtConfig {
     private Integer refreshTokenExpireAfterDays;
     private Integer refreshTokenExpireAfterDaysStayConnected;
     private String refreshTokenCookieName;
-    private final String authorizationHeader = "Authorization";
+    private String authorizationHeader;
 
     @Bean
     public SecretKey secretKey(){
