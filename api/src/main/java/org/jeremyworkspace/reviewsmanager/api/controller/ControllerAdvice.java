@@ -35,8 +35,7 @@ public class ControllerAdvice
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -46,7 +45,6 @@ public class ControllerAdvice
         return errors;
     }
 
-
     @ExceptionHandler({NoSuchElementException.class, EmptyResultDataAccessException.class})
     public ResponseEntity<Map<String, String>> handleNoSuchElementsExceptions() {
         HashMap<String, String> response = new HashMap<String,String>();
@@ -55,16 +53,14 @@ public class ControllerAdvice
     }
 
     @ExceptionHandler(FormatException.class)
-    public ResponseEntity<Map<String, String>> handleFormatException(
-            FormatException ex) {
+    public ResponseEntity<Map<String, String>> handleFormatException(FormatException ex) {
         HashMap<String, String> response = new HashMap<String,String>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(WrongOwnerException.class)
-    public ResponseEntity<Map<String, String>> handleWrongOwnerException(
-            WrongOwnerException ex) {
+    public ResponseEntity<Map<String, String>> handleWrongOwnerException(WrongOwnerException ex) {
         HashMap<String, String> response = new HashMap<String,String>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);

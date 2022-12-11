@@ -21,7 +21,7 @@ public class FieldController {
     private OwnershipVerifier ownershipVerifier;
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteList(@PathVariable("id") final Long id, @AuthenticationPrincipal User user) throws WrongOwnerException {
+    public ResponseEntity deleteField(@PathVariable("id") final Long id, @AuthenticationPrincipal User user) throws WrongOwnerException {
 
         Field f = this.fieldService.getFieldById(id).orElseThrow();
         this.ownershipVerifier.doesListBelongsToUser(f.getListReview(), user);

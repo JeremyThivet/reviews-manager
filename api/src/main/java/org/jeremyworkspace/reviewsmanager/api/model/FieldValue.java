@@ -29,6 +29,11 @@ public abstract class FieldValue {
 
     public abstract Field getField();
 
+    /**
+     * Let you set the field value from a String input.
+     * @param value
+     * @throws FormatException
+     */
     public abstract void setValueFromString(String value) throws FormatException;
 
 }

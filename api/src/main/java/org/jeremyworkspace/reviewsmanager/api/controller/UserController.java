@@ -1,8 +1,10 @@
 package org.jeremyworkspace.reviewsmanager.api.controller;
 
+import org.jeremyworkspace.reviewsmanager.api.controller.exception.WrongOwnerException;
 import org.jeremyworkspace.reviewsmanager.api.model.ListReview;
 import org.jeremyworkspace.reviewsmanager.api.model.User;
 import org.jeremyworkspace.reviewsmanager.api.model.dto.UserDto;
+import org.jeremyworkspace.reviewsmanager.api.model.helper.OwnershipVerifier;
 import org.jeremyworkspace.reviewsmanager.api.model.response.ListReviewResponse;
 import org.jeremyworkspace.reviewsmanager.api.model.response.ListReviewSumUpResponse;
 import org.jeremyworkspace.reviewsmanager.api.model.response.UserResponse;
@@ -31,6 +33,9 @@ public class UserController {
     @Autowired
     private ListReviewService listReviewService;
 
+    @Autowired
+    private OwnershipVerifier ownershipVerifier;
+
     @GetMapping("{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("id") final Long id){
         UserResponse user = new UserResponse(this.userService.getUserById(id).orElseThrow());
@@ -56,10 +61,9 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") final Long id, @AuthenticationPrincipal User user){
+    public ResponseEntity deleteUser(@PathVariable("id") final Long id, @AuthenticationPrincipal User user) throws WrongOwnerException {
         // As of now, user can only delete himself when logged in.
-        if(id != user.getId())
-            return ResponseEntity.status(403).build();
+        this.ownershipVerifier.doesUserHasId(user, id);
 
         this.userService.deleteUserById(id);
         return ResponseEntity.ok().build();
@@ -78,11 +82,10 @@ public class UserController {
     }
 
     @PostMapping("{id}/lists")
-    public ResponseEntity<ListReviewResponse> createList(@PathVariable("id") final Long userId, @Valid @RequestBody ListReview listReview, @AuthenticationPrincipal User user){
+    public ResponseEntity<ListReviewResponse> createList(@PathVariable("id") final Long userId, @Valid @RequestBody ListReview listReview, @AuthenticationPrincipal User user) throws WrongOwnerException {
 
         // We can only add list to ourselves as authenticated user.
-        if(user.getId() != userId)
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        this.ownershipVerifier.doesUserHasId(user, userId);
 
         User u = this.userService.getUserById(userId).orElseThrow();
         listReview.setOwner(u);
@@ -95,11 +98,9 @@ public class UserController {
      * @return
      */
     @GetMapping("{id}/lists")
-    public ResponseEntity<Iterable<ListReviewResponse>> getUserLists(@PathVariable("id") final Long userId, @AuthenticationPrincipal User user){
+    public ResponseEntity<Iterable<ListReviewResponse>> getUserLists(@PathVariable("id") final Long userId, @AuthenticationPrincipal User user) throws WrongOwnerException {
         // An authenticated user can only retrieve his own lists
-        if(user.getId() != userId){
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-        }
+        this.ownershipVerifier.doesUserHasId(user, userId);
 
         Iterable<ListReviewResponse> result = StreamSupport.stream(this.listReviewService.findListsByUserId(userId).spliterator(), false)
                 .map((listReview) -> new ListReviewResponse(listReview)).collect(Collectors.toList());
@@ -107,11 +108,9 @@ public class UserController {
     }
 
     @GetMapping("{id}/lists-sumup")
-    public ResponseEntity<Iterable<ListReviewSumUpResponse>> getUserListsSumUp(@PathVariable("id") final Long userId, @AuthenticationPrincipal User user){
-        // An authenticated user can only retrieve his own lists
-        if(user.getId() != userId){
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<Iterable<ListReviewSumUpResponse>> getUserListsSumUp(@PathVariable("id") final Long userId, @AuthenticationPrincipal User user) throws WrongOwnerException {
+        // An authenticated user can only retrieve his own lists sum up
+        this.ownershipVerifier.doesUserHasId(user, userId);
 
         Iterable<ListReviewSumUpResponse> result = StreamSupport.stream(this.listReviewService.findListsByUserId(userId).spliterator(), false)
                 .map((listReview) -> new ListReviewSumUpResponse(listReview)).collect(Collectors.toList());
@@ -127,7 +126,5 @@ public class UserController {
         ListReview l = this.listReviewService.saveList(list);
         return new ListReviewResponse(list);
     }
-
-
 
 }

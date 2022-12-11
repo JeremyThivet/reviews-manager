@@ -10,6 +10,7 @@ import org.jeremyworkspace.reviewsmanager.api.model.User;
 import org.jeremyworkspace.reviewsmanager.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -32,40 +33,34 @@ public class AuthenticationController {
     private UserService userService;
 
     @GetMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response){
-        // Adding RefreshToken to Cookie
+    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response){
+        // Adding expired RefreshToken to Cookie since we use http only, the front end cannot delete the cookie on itself.
         Cookie cookie = this.jwtService.getExpiredRefreshTokenCookie();
         response.addCookie(cookie);
+        return ResponseEntity.ok().build();
     }
 
     /**
-     * WHen we receive the Refresh Token, we try to get the user in the persistent model so that deleted user inbetween won't be able to use the application anymore.
+     * When we receive the Refresh Token, we try to get the user in the persistent model so that deleted user inbetween won't be able to use the application anymore.
      * @param request
      * @param response
      */
     @GetMapping("/refreshToken")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity refreshToken(HttpServletRequest request, HttpServletResponse response){
 
         Cookie[] cookies = request.getCookies();
+        Optional<Cookie> cookie =
+                cookies == null ?
+                        null : Arrays.stream(cookies).filter(c -> c.getName().equals(this.jwtConfig.getRefreshTokenCookieName())).findFirst();
 
-        if(cookies == null ){
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        if(cookie == null ){
             response.setHeader("error", "The refresh token is missing");
-            return;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Optional<Cookie> cookie = Arrays.stream(cookies).filter(c -> c.getName().equals(this.jwtConfig.getRefreshTokenCookieName())).findFirst();
-
-        if(cookie.isEmpty()){
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setHeader("error", "The refresh token is missing");
-            return;
-        }
-
-        String token = cookie.get().getValue();
 
         try{
-
+            String token = cookie.get().getValue();
             Jws<Claims> claims = this.jwtService.validateToken(token);
             Claims body = claims.getBody();
             User u = this.userService.getUserByUsername(body.getSubject()).orElseThrow();
@@ -75,9 +70,10 @@ public class AuthenticationController {
             response.addHeader("Authorization", "Bearer " + newAuthorizationToken);
 
         } catch (JwtException ex){
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setHeader("error", ex.getMessage());
-            return;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        return ResponseEntity.ok().build();
     }
 }

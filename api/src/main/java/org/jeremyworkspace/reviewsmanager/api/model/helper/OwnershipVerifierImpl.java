@@ -24,4 +24,12 @@ public class OwnershipVerifierImpl implements OwnershipVerifier {
         }
         return true;
     }
+
+    @Override
+    public boolean doesUserHasId(User u, Long id) throws WrongOwnerException {
+        if(u.getId() != id){
+            throw new WrongOwnerException("L'utilisateur connecté n'a pas le droit d'accéder à cette resource.");
+        }
+        return true;
+    }
 }

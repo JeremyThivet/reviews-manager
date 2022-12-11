@@ -4,15 +4,11 @@ import org.jeremyworkspace.reviewsmanager.api.controller.exception.FormatExcepti
 import org.jeremyworkspace.reviewsmanager.api.controller.exception.UpdateEntryException;
 import org.jeremyworkspace.reviewsmanager.api.controller.exception.WrongOwnerException;
 import org.jeremyworkspace.reviewsmanager.api.model.Entry;
-import org.jeremyworkspace.reviewsmanager.api.model.Field;
-import org.jeremyworkspace.reviewsmanager.api.model.ListReview;
 import org.jeremyworkspace.reviewsmanager.api.model.User;
 import org.jeremyworkspace.reviewsmanager.api.model.dto.EntryDto;
 import org.jeremyworkspace.reviewsmanager.api.model.helper.OwnershipVerifier;
 import org.jeremyworkspace.reviewsmanager.api.model.response.EntryResponse;
-import org.jeremyworkspace.reviewsmanager.api.model.response.ListReviewResponse;
 import org.jeremyworkspace.reviewsmanager.api.service.EntryService;
-import org.jeremyworkspace.reviewsmanager.api.service.FieldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +46,7 @@ public class EntryController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteList(@PathVariable("id") final Long id, @AuthenticationPrincipal User user) throws WrongOwnerException {
+    public ResponseEntity deleteEntry(@PathVariable("id") final Long id, @AuthenticationPrincipal User user) throws WrongOwnerException {
 
         Entry e = this.entryService.getEntryById(id).orElseThrow();
         this.ownershipVerifier.doesEntryBelongsToUser(e, user);
