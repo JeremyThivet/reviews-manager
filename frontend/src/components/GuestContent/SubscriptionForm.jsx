@@ -8,23 +8,11 @@ import Collapse from 'react-bootstrap/Collapse';
 import { submitUser } from '../../services/UserService'
 import { getCurrentLang} from '../../services/LinkService'
 import validateUser from '../../policies/UserPolicies'
+import ErrorMessageInForm from '../HelperComponent/ErrorMessageInForm'
 
 let langAcron = getCurrentLang()
 let texts = require('../../config/lang')(langAcron).register
 
-const ErrorMessage = ({errors}) => {
-
-    let isThereErrors = errors.length > 0
-    if(isThereErrors){
-        return (
-                    <ul className='text-danger'>
-                    {
-                        errors.map((error, key) => ( <li key={key}>{error}</li> ))
-                    }
-                    </ul>
-        )
-    }
-}
 
 const SubscriptionForm = () => {
 
@@ -74,11 +62,11 @@ const SubscriptionForm = () => {
                             <Form.Label>{texts.usernameLabel}</Form.Label>
                             <Form.Control autoComplete="off"  name="username" value={user.username} onChange={handleChange} required type="text" placeholder={texts.usernamePh}
                                 isValid={!errorsInUsername && user.username !== ''} isInvalid={errorsInUsername} />
-                                <Collapse in={errorsInUsername} >
-                                    <div>
-                                        <ErrorMessage errors={formErrors.username} />
-                                    </div>
-                                </Collapse>
+                            <Collapse in={errorsInUsername} >
+                                <div>
+                                    <ErrorMessageInForm errors={formErrors.username} />
+                                </div>
+                            </Collapse>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formPass">
@@ -87,7 +75,7 @@ const SubscriptionForm = () => {
                             isValid={!errorsInPass  && user.password !== ''} isInvalid={errorsInPass} />
                             <Collapse in={errorsInPass} >
                                 <div>
-                                    <ErrorMessage errors={formErrors.password} />
+                                    <ErrorMessageInForm errors={formErrors.password} />
                                 </div>
                             </Collapse>
                         </Form.Group>
@@ -97,10 +85,10 @@ const SubscriptionForm = () => {
                             <Form.Control name="repass" value={user.repass} onChange={handleChange} required type="password" placeholder={texts.passPh} 
                             isValid={!errorsInRepass  && user.repass !== ''} isInvalid={errorsInRepass} />
                             <Collapse in={errorsInRepass} >
-                                    <div>
-                                        <ErrorMessage errors={formErrors.repass} />
-                                    </div>
-                                </Collapse>
+                                <div>
+                                    <ErrorMessageInForm errors={formErrors.repass} />
+                                </div>
+                            </Collapse>
                         </Form.Group>
 
                         <hr className ="mt-4 mb-4"></hr>

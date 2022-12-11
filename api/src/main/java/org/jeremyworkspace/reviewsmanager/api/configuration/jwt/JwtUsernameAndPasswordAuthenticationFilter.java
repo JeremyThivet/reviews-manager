@@ -25,7 +25,6 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private ObjectMapper objectMapper;
-
     private boolean stayConnectedOption;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService, String loginUrl) {

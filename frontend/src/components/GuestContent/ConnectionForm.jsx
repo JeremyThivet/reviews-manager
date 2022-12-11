@@ -25,7 +25,7 @@ const ConnectionForm = () => {
     const handleChange = (event) => {
         const { name, value } = event.target
 
-        let valueToAssign = name == "stayConnected" ? event.target.checked : value
+        let valueToAssign = name === "stayConnected" ? event.target.checked : value
 
         let newUser = {...user, [name]: valueToAssign}
         

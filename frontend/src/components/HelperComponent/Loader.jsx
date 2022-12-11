@@ -12,8 +12,6 @@ const Loader = ({isLoading}) => {
             <Spinner animation="border" />
             <p>{texts.text}</p>
         </>
-        
-
         )
     }
 

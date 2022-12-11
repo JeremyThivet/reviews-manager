@@ -14,26 +14,14 @@ import UserContext from '../../services/UserContextProvider'
 import { handleCall } from '../../services/AccessControlService'
 import Loader from '../HelperComponent/Loader'
 import { convertFieldToDisplayable } from '../../model/FieldConverter'
-import ToastCustom from '../HelperComponent/ToastCustom'
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import validateField from '../../policies/FieldPolicies'
+import ErrorMessageInForm from '../HelperComponent/ErrorMessageInForm'
+import { CustomizableTable, CustomizableTableEntry } from '../HelperComponent/CustomizableTable'
+import { DeleteButton } from '../HelperComponent/CustomButtons'
 
 let langAcron = getCurrentLang()
 let texts = require('../../config/lang')(langAcron).editList
-
-const ErrorMessage = ({errors}) => {
-
-    let isThereErrors = errors.length > 0
-    if(isThereErrors){
-        return (
-                    <ul className='text-danger'>
-                    {
-                        errors.map((error, key) => ( <li key={key}>{error}</li> ))
-                    }
-                    </ul>
-        )
-    }
-}
 
 const AddNewFieldForm = ({addFieldInTab}) => {
 
@@ -125,7 +113,7 @@ const AddNewFieldForm = ({addFieldInTab}) => {
                                 <Form.Control autoComplete="off"  name="fieldName" value={fieldToAdd.fieldName} onChange={handleChange} required type="text" placeholder={texts.namePh} />
                                 <Collapse in={errorsInFieldName} className="mt-3">
                                     <div>
-                                        <ErrorMessage errors={formErrors.fieldName} />
+                                        <ErrorMessageInForm errors={formErrors.fieldName} />
                                     </div>
                                 </Collapse>
                             </Form.Group>
@@ -139,7 +127,7 @@ const AddNewFieldForm = ({addFieldInTab}) => {
                             </Form.Select>
                             <Collapse in={errorsInType} >
                                     <div>
-                                        <ErrorMessage errors={formErrors.type} />
+                                        <ErrorMessageInForm errors={formErrors.type} />
                                     </div>
                             </Collapse>
 
@@ -149,7 +137,7 @@ const AddNewFieldForm = ({addFieldInTab}) => {
                                     <Form.Control autoComplete="off"  name="scoreMax" value={fieldToAdd.scoreMax} onChange={handleChange} required type="number" />
                                     <Collapse in={errorsInScoreMax} className="mt-3">
                                         <div>
-                                            <ErrorMessage errors={formErrors.scoreMax} />
+                                            <ErrorMessageInForm errors={formErrors.scoreMax} />
                                         </div>
                                     </Collapse>
                                 </Form.Group>
@@ -186,50 +174,6 @@ const AddNewFieldForm = ({addFieldInTab}) => {
     )
 
 }
-
-const DeleteButton = ({deleteItem, id, toastModifier}) => {
-
-    const handleClick = async (event) => {
-        event.preventDefault()  
-
-        let url = "/api/fields/" + id
-        let response = await handleCall(url, "DELETE", {})
-
-        if(response.success){
-            deleteItem(id)
-            toastModifier[1]([...toastModifier[0], <ToastCustom title={texts.successDeletedTitle} content={texts.successDeletedContent} />])
-        }
-
-        if(response.errors || response.needToLoginAgain){
-            toastModifier[1]([...toastModifier[0], <ToastCustom variant="danger" title={texts.failDeletedTitle} content={texts.failDeletedContent} />])
-        }
-        
-    }
-
-    return (
-        <Button onClick={handleClick} variant="danger"><i className="fa-solid fa-xmark"></i></Button>
-    )
-
-}
-
-const TabFieldItem = ({item, deleteButton}) => {
-
-    let autres = [];
-    for(const key in item.autres){
-        autres.push(<li key={key}>{texts[key]} : {item.autres[key]}</li>)
-    }
-
-    return (
-                <tr>
-                    <td className='align-middle'>{item.fieldName}</td>
-                    <td className='align-middle'>{item.fieldType}</td>
-                    <td className='align-middle'>{autres.length ===  0 ? " - " : autres}</td>
-                    <td className='align-middle'>{deleteButton}</td>
-                </tr>
-
-    )
-}
-
 
 const ListEditPage = () => {
 
@@ -269,15 +213,28 @@ const ListEditPage = () => {
             })();
     }, [])
 
-    // Preparing table
+    // Preparing table and building
+    let headers = [texts.tabFieldName, texts.tabFieldType, texts.tabFieldAutres, texts.tabFieldActions]
+    let buttonToastsTexts = {successDeletedTitle: texts.successDeletedTitle,
+                             successDeletedContent: texts.successDeletedContent,
+                             failDeletedTitle: texts.failDeletedTitle,
+                             failDeletedContent: texts.failDeletedContent
+                            }
     let items = [];
     items = list.fields.map((item, key) => {
                                 let convertedItem = convertFieldToDisplayable(item)
-                                return <TabFieldItem key={key}
-                                    deleteButton={<DeleteButton deleteItem={removeFromArray} toastModifier={[toasts, setToasts]} id={item.id} />}
-                                    item={convertedItem}/>
-                                }  
-                            
+                                let autres = [];
+                                for(const key in convertedItem.autres){
+                                    autres.push(<li key={key}>{texts[key]} : {convertedItem.autres[key]}</li>)
+                                }
+
+                                let fields = [convertedItem.fieldName, convertedItem.fieldType, autres.length === 0 ? " - " : autres]
+
+                                let buttons = [<DeleteButton key="2" url="/api/fields/" texts={buttonToastsTexts} actionFunction={removeFromArray} 
+                                              toastModifier={[toasts, setToasts]} id={item.id} />]
+
+                                return (<CustomizableTableEntry key={key} fields={fields} buttons={buttons} />)
+                            }       
                          )
 
     // If loading is completed and not list
@@ -314,20 +271,7 @@ const ListEditPage = () => {
                                 <Card.Body>
                                         <h3 className="text-info mb-3">{list.listName}</h3>
 
-                                        <Table striped bordered hover>
-                                            <thead>
-                                                <tr>
-                                                    <th>{texts.tabFieldName}</th>
-                                                    <th>{texts.tabFieldType}</th>
-                                                    <th>{texts.tabFieldAutres}</th>
-                                                    <th>{texts.tabFieldActions}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {   list.fields.length !== 0 && items
-                                                }
-                                            </tbody>
-                                        </Table>
+                                        <CustomizableTable headers={headers} entries={items} />
 
                                         {(list.fields.length === 0 && !isLoading) && texts.empty }
 

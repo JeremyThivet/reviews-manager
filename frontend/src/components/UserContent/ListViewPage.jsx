@@ -18,7 +18,6 @@ import DatePicker from 'react-date-picker';
 import FieldType from '../../model/helper/FieldType'
 import ToastCustom from '../HelperComponent/ToastCustom'
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import { navbar } from '../../config/lang/fr';
 
 let langAcron = getCurrentLang()
 let texts = require('../../config/lang')(langAcron).listview

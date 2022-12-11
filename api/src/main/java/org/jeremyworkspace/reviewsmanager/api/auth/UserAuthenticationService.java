@@ -20,7 +20,7 @@ public class UserAuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository
-                .findFirstByUsername(username)
+                .findFirstByUsernameIgnoreCase(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(String.format("Username %s not found", username))
                 );

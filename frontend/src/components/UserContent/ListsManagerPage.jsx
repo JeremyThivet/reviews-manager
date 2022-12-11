@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
@@ -7,14 +7,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Collapse from 'react-bootstrap/Collapse';
-import Table from 'react-bootstrap/Table';
 import { getCurrentLang} from '../../services/LinkService'
 import UserContext from '../../services/UserContextProvider'
 import { handleCall } from '../../services/AccessControlService'
 import Loader from '../HelperComponent/Loader'
-import ToastCustom from '../HelperComponent/ToastCustom'
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import {convertToReadableFormat} from '../../services/DateFormatter'
+import { CustomizableTable, CustomizableTableEntry } from '../HelperComponent/CustomizableTable'
+import { DeleteButton, EditButton } from '../HelperComponent/CustomButtons'
 
 let langAcron = getCurrentLang()
 let texts = require('../../config/lang')(langAcron).listsManager
@@ -102,55 +102,6 @@ const NewListForm = () => {
     )
 }
 
-const EditButton = ({id}) => {
-
-    let url = "/editerclassement/" + id
-
-    return (<Link to={url}>
-                <Button variant="info"><i className="fa-solid fa-pencil fa-sm"></i></Button>
-            </Link>)
-
-}
-
-const DeleteButton = ({deleteItem, id, toastModifier}) => {
-
-    const handleClick = async (event) => {
-        event.preventDefault()  
-
-        let url = "/api/lists/" + id
-        let response = await handleCall(url, "DELETE", {})
-
-        if(response.success){
-            deleteItem(id)
-            toastModifier[1]([...toastModifier[0], <ToastCustom title={texts.successDeletedTitle} content={texts.successDeletedContent} />])
-        }
-
-        if(response.errors || response.needToLoginAgain){
-            toastModifier[1]([...toastModifier[0], <ToastCustom variant="danger" title={texts.failDeletedTitle} content={texts.failDeletedContent} />])
-        }
-        
-    }
-
-    return (
-        <Button onClick={handleClick} variant="danger"><i className="fa-solid fa-xmark fa-lg"></i></Button>
-    )
-
-}
-
-const TabListItem = ({item, deleteButton, editButton}) => {
-
-    return (
-                <tr>
-                    <td>{item.listName}</td>
-                    <td>{convertToReadableFormat(item.creationDate)}</td>
-                    <td>{convertToReadableFormat(item.lastUpdate)}</td>
-                    <td>{editButton} {deleteButton}</td>
-                </tr>
-
-    )
-}
-
-
 const ListsManagerPage = () => {
 
     const [userCtx, setUserCtx] = useContext(UserContext)
@@ -179,14 +130,22 @@ const ListsManagerPage = () => {
 
 
     // Preparing table
-    let items = [];
-    items = userLists.map((item, key) => 
-                                <TabListItem key={key}
-                                    deleteButton={<DeleteButton deleteItem={removeFromArray} toastModifier={[toasts, setToasts]} id={item.id} />}
-                                    editButton={<EditButton id={item.id} />}
-                                    item={item}/>
-                            
-                         )
+    let headers = [texts.tabListName, texts.tabListCreationDate, texts.tabListUpdateDate, texts.tabListActions]
+    let buttonToastsTexts = {successDeletedTitle: texts.successDeletedTitle,
+                             successDeletedContent: texts.successDeletedContent,
+                             failDeletedTitle: texts.failDeletedTitle,
+                             failDeletedContent: texts.failDeletedContent
+                            }
+    let items = []
+    items = userLists.map((item, key) => {
+                                let fields = [item.listName, convertToReadableFormat(item.creationDate), convertToReadableFormat(item.lastUpdate)]
+                                let buttons = [<EditButton  key="1" url="/editerclassement/" id={item.id} />,
+                                               <DeleteButton key="2" url="/api/lists/" texts={buttonToastsTexts} actionFunction={removeFromArray} 
+                                                             toastModifier={[toasts, setToasts]} id={item.id} />]
+
+                                return (<CustomizableTableEntry key={key} fields={fields} buttons={buttons} />)
+                            }
+                        )
     // Render form 
     return (
 
@@ -208,25 +167,13 @@ const ListsManagerPage = () => {
         <Row className="text-center justify-content-center">
             <Col className="col-md-9">
                 <hr className ="mt-4 mb-5"></hr>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>{texts.tabListName}</th>
-                            <th>{texts.tabListCreationDate}</th>
-                            <th>{texts.tabListUpdateDate}</th>
-                            <th>{texts.tabListActions}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {   userLists.length !== 0 && items
-                        }
-                    </tbody>
-                </Table>
+                
+                <CustomizableTable headers={headers} entries={items} />
+
                 <Loader isLoading={isLoading} />
 
                 
                 <ToastContainer 
-                
                 className="p-3" position="bottom-end">
                     {toasts}
                 </ToastContainer>

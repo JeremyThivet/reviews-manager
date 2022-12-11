@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        return this.userRepository.findFirstByUsername(username);
+        return this.userRepository.findFirstByUsernameIgnoreCase(username);
     }
 
     private User saveUser(User user){
