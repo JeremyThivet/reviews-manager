@@ -2,7 +2,6 @@
 
 A simple Single Page Application built with Spring Boot and React.js. It lets you manage your custom lists of reviews (favorites movies, visited museum, ...). You can create your own lists and populate them.
 
-Live version : https://www.revieworld.tk/
 
 ## Installation
 
