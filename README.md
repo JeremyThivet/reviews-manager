@@ -1,6 +1,24 @@
 # Reviews Manager
 
-A simple Single Page Application built with Spring Boot and React.js. It lets you manage your custom lists of reviews (favorites movies, visited museum, ...). You can create your own lists and populate them.
+## About
+
+A simple Single Page Application built with Spring Boot and React.js. It lets you manage your custom lists of reviews (favorites movies, visited museum, preferred restaurants, ...). You can create your own lists and populate them.
+
+## Live demo
+
+You can access a live demo of the app here: https://revieworld-demo.onrender.com/mesclassements
+
+⚠️ Please note that this demo does not persist data, the first access can be slow due to the hosting provider launching the container for the first incoming request after an idle period.
+
+## Project status
+
+ℹ️ This project was developed for self-education purpose, I wanted to put my theorical knowledge on Spring, React and Devops in practice.
+
+As it is a first version, the codebase is not perfect though, coming back to it after one year, here are some improvements that could be done:
+
+- Moving from a 3 tiers to an hexagonal architecture using the clean architecture principles following Robert Martin's Guidelines
+- Rewriting tests to make them clearer (using the Given / When / Then approach for instance)
+- Rework the DevOps part to make it easier to deploy
 
 
 ## Installation
