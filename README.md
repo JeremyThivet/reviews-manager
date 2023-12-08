@@ -6,7 +6,7 @@ A simple Single Page Application built with Spring Boot and React.js. It lets yo
 
 ## Live demo
 
-You can access a live demo of the app here: https://revieworld-demo.onrender.com/mesclassements
+You can access a live demo of the app here: https://revieworld-demo.onrender.com/
 
 ⚠️ Please note that this demo does not persist data, the first access can be slow due to the hosting provider launching the container for the first incoming request after an idle period.
 
