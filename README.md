@@ -2,7 +2,7 @@
 
 ## About
 
-A simple Single Page Application built with Spring Boot and React.js. It lets you manage your custom lists of reviews (favorites movies, visited museum, preferred restaurants, ...). You can create your own lists and populate them.
+A simple Single Page Application built with Spring Boot and React.js. It lets you manage your custom lists of reviews (favorites movies, visited museum, preferred restaurants, ...). You can create your own lists and populate them. On the first run, you will be asked to create the very first user that will be the app administrator, then you can come back on the homepage and log in using your credentials.
 
 ## Live demo
 
