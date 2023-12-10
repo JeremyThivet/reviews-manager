@@ -6,9 +6,11 @@ A simple Single Page Application built with Spring Boot and React.js. It lets yo
 
 ## Live demo
 
-You can access a live demo of the app here: https://revieworld-demo.onrender.com/
+⚠️ Please note that this demo does not persist data, **the first access can be slow** due to the hosting provider launching the container for the first incoming request after an idle period. 
 
-⚠️ Please note that this demo does not persist data, the first access can be slow due to the hosting provider launching the container for the first incoming request after an idle period.
+⏰ **It can take up to 1 minute for the container to be launched as it is run on a low resources asset.**
+
+You can access a live demo of the app here: https://revieworld-demo.onrender.com/
 
 ## Project status
 
